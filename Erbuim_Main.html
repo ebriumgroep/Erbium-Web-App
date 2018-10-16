@@ -67,10 +67,7 @@
                     }
                 var clickMe = document.createElement("button");
                     clickMe.innerHTML = "Edit";
-                    clickMe.id = "editTrap";
-                    clickMe.onclick = function() {
-                        document.getElementById("modal").style.visibility = "visible";
-                    }
+                    clickMe.id = "editTButton";
                 var tempLbl = document.createElement("label");
                     tempLbl.innerHTML = "<br> Trap Temp: <br>";
                 var humidLbl = document.createElement("label");
@@ -168,6 +165,18 @@
 			document.getElementById("Traps").style.display = "block";
 			document.getElementById("Graphs").style.display = "none";
 			}
+			$(document).ready(function(){
+				$("#trapAddButton").click(function(){
+					$("#addTrapModal").modal('show');
+				});
+				
+			});
+			$(document).ready(function(){
+				$(document).on('click', "#editTButton", function() {
+					$("#editTrapModal").modal('show');
+				});
+				
+			});
         </script>
     </head>
 
@@ -211,48 +220,61 @@
 		
         <div id="Traps" class="tabcontent">
         <!-- <p> Welcome <?php echo $_SESSION['fullname']; ?>. This is an overview of all the registered traps in your name<p><br> -->
-        <button onclick="addTrap()" class="buttons">Add Trap</button><br>
+        <button id="trapAddButton" class="buttons">Add Trap</button><br>
         <!-- testing trap add locally on this html page 
         <button onclick="addTrapDiv()">test trap add</button> -->
 
-        <label id="trapNo" style="color:white;"></label><br>
-
-        <label style="margin-left: 20ps;color:white;" >Sort Traps By :</label>
-        <select>
-          <option value="numOfMoths">Number of moths</option>
-          <option value="Temp">Temprature</option>
-          <option value="GroupMac">Group Macadamia</option>
-          <option value="GroupOrch">Group Orchard</option>
+        <label id="trapNo" style="color:white; float:right;padding:0;margin:0;"></label><br>
+        <select style="float:right;">
+			<option selected disabled>Sort Traps By  (choose option)</option>
+			<option value="numOfMoths">Number of moths</option>
+			<option value="Temp">Temprature</option>
+			<option value="GroupMac">Group Macadamia</option>
+			<option value="GroupOrch">Group Orchard</option>
             <option value="Add another group">Add another group</option>
         </select><br><br>
-        <div id="modal" name="EditModal">
-                <span class="close-button" onclick="close_click()"> X </span>
-                Trap Type: <input type="text" id="editType"><br>
-                Hardware ID: <input type="text" id="editHardwareID"><br>
-                Upload Interval: <!--<input type="text" id="editUpload"><br>-->
-                <select id="upload_interval">
-                        <option value="Everyhour">Every hour</option>
-                        <option value="fiveperday">Five times a day</option>
-                        <option value="threeperday">Three times a day</option>
-                        <option value="onceperday">Once a day</option>
-                </select><br>
-                Humidity and Temprature interval: 
-                <select>
-                    <option value="Everyhour">Every hour</option>
-                    <option value="Twiceperday">Twice per day</option>
-                    <option value="Onceperday">Once per day</option>
-                </select><br><br><br>
-
-                <button>Submit changes for SINGLE trap</button><br>
-                <button>Submit changes for ALL traps</button><br>
-
-        </div>
-        <div id="modal2" name="addTrapModal">
-				
-                <span class="close-button" onclick="close_click()"> X </span>
-				<div id="innerTrapModal" style="border-radius:8px;">
-				<h2>Add another trap</h2>
-        		<form method="POST" action="addTrap.php">
+		<div id="editTrapModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h4 class="modal-title">Confirmation</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						
+					</div>
+					<div class="modal-body">
+						Trap Type: <input type="text" id="editType"><br>
+						Hardware ID: <input type="text" id="editHardwareID"><br>
+						Upload Interval: <!--<input type="text" id="editUpload"><br>-->
+						<select id="upload_interval">
+								<option value="Everyhour">Every hour</option>
+								<option value="fiveperday">Five times a day</option>
+								<option value="threeperday">Three times a day</option>
+								<option value="onceperday">Once a day</option>
+						</select><br>
+						Humidity and Temprature interval: 
+						<select>
+							<option value="Everyhour">Every hour</option>
+							<option value="Twiceperday">Twice per day</option>
+							<option value="Onceperday">Once per day</option>
+						</select>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="addTrapModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+					<h4 class="modal-title" style="text-align:left;">Add Another Trap</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						
+					</div>
+					<div class="modal-body">
+				<form method="POST" action="addTrap.php" id="trapForm">
         			Trap Type: <input type="text" id="addTraptype" name="type"><br>
         			Hardware ID: <input type="text" id="addTraphardware" name="hardware"><br>
         			Upload Interval: <!--<input type="text" id="editUpload"><br>-->
@@ -305,19 +327,113 @@
 						
                 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myMap" type="text/javascript"></script>
+			<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myMap" type="text/javascript"></script>
 			 <label>Lat: </label><input type="text" id="lblLat" name="trapLat">
 			 <label>Long: </label><input type="text" id="lblLong" name="trapLong"><br>
-        			<input type="submit" value="Submit">
+        			
 					
         		</form>
-				<button onclick="close_click()">Cancel    </button>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<input type="submit" class="btn btn-primary" value="Add Trap" form="trapForm">
+					</div>
 				</div>
+			</div>
+		</div>
+        <!-- <div id="modal" name="EditModal"> -->
+                <!-- <span class="close-button" onclick="close_click()"> X </span> -->
+                <!-- Trap Type: <input type="text" id="editType"><br> -->
+                <!-- Hardware ID: <input type="text" id="editHardwareID"><br> -->
+                <!-- Upload Interval: <!--<input type="text" id="editUpload"><br>--> -->
+                <!-- <select id="upload_interval"> -->
+                        <!-- <option value="Everyhour">Every hour</option> -->
+                        <!-- <option value="fiveperday">Five times a day</option> -->
+                        <!-- <option value="threeperday">Three times a day</option> -->
+                        <!-- <option value="onceperday">Once a day</option> -->
+                <!-- </select><br> -->
+                <!-- Humidity and Temprature interval:  -->
+                <!-- <select> -->
+                    <!-- <option value="Everyhour">Every hour</option> -->
+                    <!-- <option value="Twiceperday">Twice per day</option> -->
+                    <!-- <option value="Onceperday">Once per day</option> -->
+                <!-- </select><br><br><br> -->
+
+                <!-- <button>Submit changes for SINGLE trap</button><br> -->
+                <!-- <button>Submit changes for ALL traps</button><br> -->
+
+        <!-- </div> -->
+        <!-- <div id="modal2" name="addTrapModal"> -->
+				
+                <!-- <span class="close-button" onclick="close_click()"> X </span> -->
+				<!-- <div id="innerTrapModal" style="border-radius:8px;"> -->
+				<!-- <h2>Add another trap</h2> -->
+        		<!-- <form method="POST" action="addTrap.php"> -->
+        			<!-- Trap Type: <input type="text" id="addTraptype" name="type"><br> -->
+        			<!-- Hardware ID: <input type="text" id="addTraphardware" name="hardware"><br> -->
+        			<!-- Upload Interval: <!--<input type="text" id="editUpload"><br>--> -->
+        			<!-- <select id="Trap_upload_interval" name="upload_interval"> -->
+                        <!-- <option value="Everyhour">Every hour</option> -->
+                        <!-- <option value="fiveperday">Five times a day</option> -->
+                        <!-- <option value="threeperday">Three times a day</option> -->
+                        <!-- <option value="onceperday">Once a day</option> -->
+        			<!-- </select><br> -->
+					<!-- <p>Please select the location of the trap you want to add below</p> -->
+					<!-- <div id="googleMap" style="width:425px;height:220px;"></div> -->
+
+                <!-- <script> -->
+				<!-- var myLat; -->
+				<!-- var myLong; -->
+				<!-- function myMap() { -->
+					<!-- var mapProp= { -->
+						<!-- center:new google.maps.LatLng(-25.755417,28.230767), -->
+						<!-- zoom:13, -->
+					<!-- }; -->
+					<!-- var map=new google.maps.Map(document.getElementById("googleMap"),mapProp); -->
+
+					<!-- google.maps.event.addListener(map, 'click', function(event) { -->
+						<!-- //myLat = event.latLng.lat(); -->
+						<!-- //myLong = event.LatLng.lng(); -->
+						<!-- //alert(myLat); -->
+						<!-- document.getElementById("lblLat").value = event.latLng.lat(); -->
+						<!-- myLat = document.getElementById("lblLat").innerHTML; -->
+						<!-- document.getElementById("lblLong").value = event.latLng.lng(); -->
+						<!-- myLong = document.getElementById("lblLong").innerHTML; -->
+					<!-- }); -->
+					<!-- map.addListener('click', function(e) { -->
+						<!-- //myLong = e.; -->
+						<!-- //alert("ok: " + myLong); -->
+						<!-- placeMarker(e.latLng, map);	 -->
+					<!-- }); -->
+
+				<!-- } -->
+				<!-- var marker; -->
+				<!-- function placeMarker(position, map) { -->
+					<!-- if (marker && marker.setMap) { -->
+						<!-- marker.setMap(null); -->
+					<!-- } -->
+					<!-- marker = new google.maps.Marker({ -->
+						<!-- position: position, -->
+						<!-- map: map -->
+					<!-- }); -->
+					<!-- map.panTo(position); -->
+				<!-- } -->
+						
+                <!-- </script> -->
+
+<!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myMap" type="text/javascript"></script> -->
+			 <!-- <label>Lat: </label><input type="text" id="lblLat" name="trapLat"> -->
+			 <!-- <label>Long: </label><input type="text" id="lblLong" name="trapLong"><br> -->
+        			<!-- <input type="submit" value="Submit"> -->
+					
+        		<!-- </form> -->
+				<!-- <button onclick="close_click()">Cancel    </button> -->
+				<!-- </div> -->
 				
                 
-                <!-- <button onclick="document.location.reload()">Submit</button> -->
+                <!-- <!-- <button onclick="document.location.reload()">Submit</button> --> -->
 
-        </div>
+        <!-- </div> -->
 		
         <div id="traps"> <!-- traps will be displayed in here -->
 
