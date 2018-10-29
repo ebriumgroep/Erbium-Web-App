@@ -14,25 +14,29 @@
 	$active_clientid = "";
 	$active_fullname = "";
 
+	//Hashing
+    $escapedPW = mysqli_real_escape_string($conn, $active_password);
+//    $salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
+//    $saltedPW = $escapedPW.$salt;
+//    $hashedPW = hash('sha256', $saltedPW);
+
     $sql = "SELECT * FROM client";
 	$result = $conn->query($sql);
 
 	//Check if the user is in the database
-	if($result->num_rows > 0)
-	{
+	if($result->num_rows > 0){
 		while ($row = $result->fetch_assoc()) {
-			# code...
-			if($row["username"] == $active_username)
-			{
-				if($row["password"] == $active_password)
-				{
+			if($row["username"] == $active_username){
+			    $saltedPW = $escapedPW.$row["salt"];
+                $hashedPW = hash('sha256', $saltedPW);
+
+                if($row["password"] == $hashedPW){
 					$active_clientid = $row['client_id'];
 					$active_fullname = $row['full_name'];
 					$databaseGranted = true;
 					break;
 				}
-				else
-				{
+				else{
 					$wrongPassword = true;
 					break;
 				}
