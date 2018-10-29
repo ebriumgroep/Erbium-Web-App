@@ -8,8 +8,8 @@
 
     //echo 'Value:'.$HTTP_RAW_POST_DATA;
     $data = explode(",", file_get_contents("php://input"));
-    $timeStamp = $data[0].' '.$data[1];
-    $sql = "INSERT INTO trap_count(time_stamp, device_id) VALUES ('$timeStamp', '$data[2]')";
+    $timeStamp = $data[0];
+    $sql = "INSERT INTO trap_count(time_stamp, device_id) VALUES ('$timeStamp', '$data[1]')";
 
     if($conn->query($sql) === true){
         $conn->close();

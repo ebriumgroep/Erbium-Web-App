@@ -5,7 +5,7 @@
     <title>Erbuim Login</title>
     <script src="jquery-3.2.1.js"></script>
     <link rel="stylesheet" type="text/css" href="signInStyles.css">
-<link rel="stylesheet" type="text/css" href="index.css">
+<link rel="stylesheet" type="text/css" href="signin.css">
     <script>
         function showToast(){
             var x = document.getElementById("snackbar");
@@ -17,7 +17,7 @@
             $.get("checkLoggedIn.php", function(data){
                 // console.log(data);
                 if(data == true){
-                    window.location.href = "Erbuim_Main.html";
+                    window.location.href = "main.html";
                 }
             });
 
@@ -37,7 +37,7 @@
                     console.log(data);
                     if(data == 0){
                         document.getElementById("snackbar").innerHTML = "Access Granted";
-                        window.location.href = "Erbuim_Main.html";
+                        window.location.href = "main.html";
                         showToast();
                     }else if(data == 1){
                         document.getElementById("snackbar").innerHTML = "Password entered is wrong!";

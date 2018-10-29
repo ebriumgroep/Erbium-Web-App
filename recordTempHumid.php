@@ -8,9 +8,9 @@
 
     //echo 'Value:'.$HTTP_RAW_POST_DATA;
     $data = explode(",", file_get_contents("php://input"));
-    $timeStamp = $data[0].' '.$data[1];
+    $timeStamp = $data[0];
     $sql = "INSERT INTO temp_humid(temperature, humidity, time_stamp, device_id) 
-            VALUES ('$data[3]','$data[4]','$timeStamp', '$data[2]')";
+            VALUES ('$data[2]','$data[3]','$timeStamp', '$data[1]')";
 
     if($conn->query($sql) === true){
         $conn->close();

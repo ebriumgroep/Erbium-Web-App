@@ -36,9 +36,9 @@
 
 	if($conn->multi_query($sql) === true){
 		$conn->close();
-		header("Location:Erbuim_Main.html");
+		header("Location:main.html");
 		// echo "<script>
-		// window.location.href = 'Erbuim_Main.php';
+		// window.location.href = 'main.php';
 	  // </script>";
 		die();
 	}

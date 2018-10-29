@@ -52,21 +52,19 @@
 		$_SESSION['username'] = $active_username;
 		$_SESSION['clientId'] = $active_clientid;
 		$_SESSION['fullname'] = $active_fullname;
-		// header('Location: Erbuim_Main.php');
+		// header('Location: main.php');
 		echo 0;
 	}
 	else if($wrongPassword){
 		$conn->close();
-		// header("refresh:0.5; url = index.html");
+		// header("refresh:0.5; url = signin.html");
 		// echo "Password entered is wrong!";
 		echo 1;
-		// header('Location: index.html');
+		// header('Location: signin.html');
 	}
 	else{
 		$conn->close();
-		// header("refresh:0.5; url = index.html");
+		// header("refresh:0.5; url = signin.html");
 		echo 2;
-		// header('Location: index.html');
+		// header('Location: signin.html');
 	}
-
-?>
