@@ -9,10 +9,15 @@
     //echo 'Value:'.$HTTP_RAW_POST_DATA;
     $data = explode(",", file_get_contents("php://input"));
     $timeStamp = $data[0];
+    $deviceID = $data[1];
     $sql = "INSERT INTO temp_humid(temperature, humidity, time_stamp, device_id) 
-            VALUES ('$data[2]','$data[3]','$timeStamp', '$data[1]')";
+            VALUES ('$data[2]','$data[3]','$timeStamp', '$deviceID')";
 
     if($conn->query($sql) === true){
+        $sql = "UPDATE device
+                SET tempCount = tempCount + 1
+                WHERE device_id = '$deviceID';";
+        $conn->query($sql);
         $conn->close();
         //echo "Successful";
         echo '1';
