@@ -11,7 +11,7 @@
 
 //TODO
 
-    $sql = "SELECT  client_id, hardware_id, token, type, Upload_Interval, Battery_Percent caught from device";
+    $sql = "SELECT  client_id, hardware_id, token, type, Upload_Interval, Battery_Percent, caught from device";
     $result = $conn->query($sql);
     $counter = 0;
 	
