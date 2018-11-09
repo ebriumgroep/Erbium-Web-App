@@ -11,7 +11,7 @@
 
 	//TODO
 
-    $sql = "SELECT  client_id, hardware_id, token, type, Upload_Interval, Battery_Percent, caught from device";
+    $sql = "SELECT * from device where client_id = '$active_client'";
     $result = $conn->query($sql);
     $counter = 0;
 	
@@ -19,12 +19,8 @@
 	{
         $result_array = array();
 		while ($row = $result->fetch_assoc()) {
-			# code...
-			if($row["client_id"] == $active_client)
-			{
-                $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"],$row["Battery_Percent"]);
-				//$returnedString .=  $row["hardware_id"].' '.$row["type"]."\n";
-            }
+            $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"],$row["Battery_Percent"], $row["device_id"]);
+            //$returnedString .=  $row["hardware_id"].' '.$row["type"]."\n";
             $counter = $counter + 1;
 		}
 	}
