@@ -6,9 +6,9 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-	session_start();
-	$active_client = $_SESSION['clientId'];
-
+//	session_start();
+//	$active_client = $_SESSION['clientId'];
+    $active_client  = 21;
 //TODO
 
     $sql = "SELECT  client_id, hardware_id, token, type, Upload_Interval, Battery_Percent, caught from device";
