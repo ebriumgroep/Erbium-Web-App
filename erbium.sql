@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 29, 2018 at 07:52 PM
+-- Generation Time: Nov 09, 2018 at 08:35 AM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -38,14 +38,16 @@ CREATE TABLE IF NOT EXISTS `client` (
   `latitude` double DEFAULT NULL,
   `longitude` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `client`
 --
 
 INSERT INTO `client` (`client_id`, `full_name`, `username`, `password`, `salt`, `latitude`, `longitude`) VALUES
-(21, 'User 111', 'user111', '872a2cfa8e8b2d1c7d242db1a94411fc245d023301b3874a9cbff398b6b5afeb', '2250f93dda581eaeb80f66d8098aac3f2aca17683c1ae775cf0b1db935aa76c1', NULL, NULL);
+(21, 'User 111', 'user111', '872a2cfa8e8b2d1c7d242db1a94411fc245d023301b3874a9cbff398b6b5afeb', '2250f93dda581eaeb80f66d8098aac3f2aca17683c1ae775cf0b1db935aa76c1', NULL, NULL),
+(22, 'User  Two', 'user2', '9f53821947b75c191539b442a2079dc1a44aae1ed94b752d2510be6b1af40c17', 'b4f5e44910df674f917ff019f33beb8fb6bc7f01306562fbfb3e13494ce9854f', NULL, NULL),
+(23, 'User  Three', 'user3', '763fdeae6baf2b01400f78596b5e4abf29d9da135a1b6bf02a02819177d9e379', 'de8a39e8da1348f6d17e756cfcb4875a0f93c0269207c14d04da841b346fe61a', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -61,8 +63,9 @@ CREATE TABLE IF NOT EXISTS `device` (
   `token` varchar(45) NOT NULL,
   `type` varchar(45) NOT NULL,
   `Upload_Interval` varchar(45) DEFAULT NULL,
-  `caught` int(11) DEFAULT '0',
-  `tempCount` int(11) NOT NULL DEFAULT '1',
+  `caught` int(11) DEFAULT NULL,
+  `tempCount` int(11) NOT NULL,
+  `Battery_Percent` int(11) NOT NULL,
   PRIMARY KEY (`device_id`),
   KEY `client_id` (`client_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
@@ -71,13 +74,13 @@ CREATE TABLE IF NOT EXISTS `device` (
 -- Dumping data for table `device`
 --
 
-INSERT INTO `device` (`device_id`, `client_id`, `hardware_id`, `token`, `type`, `Upload_Interval`, `caught`, `tempCount`) VALUES
-(20, 21, 'sac_6', '5', 'Butterflies', 'FivePerDay', 7, 0),
-(21, 21, 'sac1', '0', 'Moths', 'fiveperday', 3, 4),
-(22, 21, 'sac2', '0', 'Moths', 'Everyhour', 1, 0),
-(23, 21, 'sac3', '0', 'Moths', 'Everyhour', 5, 0),
-(24, 21, 'sac4', '0', 'Moth', 'Everyhour', 2, 0),
-(25, 21, 'sac5', '0', 'Moths', 'onceperday', 12, 0);
+INSERT INTO `device` (`device_id`, `client_id`, `hardware_id`, `token`, `type`, `Upload_Interval`, `caught`, `tempCount`, `Battery_Percent`) VALUES
+(20, 21, 'sac_6', '5', 'Butterflies', 'FivePerDay', 7, 0, 0),
+(21, 21, 'sac1', '0', 'Moths', 'fiveperday', 3, 4, 0),
+(22, 21, 'sac2', '0', 'Moths', 'Everyhour', 1, 0, 0),
+(23, 21, 'sac3', '0', 'Moths', 'Everyhour', 5, 0, 0),
+(24, 21, 'sac99', '88', 'Butterflies', 'onceperday', 2, 0, 0),
+(25, 21, 'sac5', '0', 'Moths', 'onceperday', 12, 0, 0);
 
 -- --------------------------------------------------------
 
