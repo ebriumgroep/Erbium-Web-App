@@ -2,7 +2,7 @@
 <html>
 
     <head>
-		<meta charset="utf-8">
+		<!--<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -11,14 +11,14 @@
 		<script src="jquery-3.2.1.js"></script>
 		<script src="modalJS.js"></script>
 		<link rel="stylesheet" type="text/css" href="main.css">
-		<title>Erbium Project</title>
+		<title>Erbium Project</title>-->
 
-        <!--<link rel="stylesheet" type="text/css" href="main.css">
+        <link rel="stylesheet" type="text/css" href="main.css">
         <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
         <script src="jquery-3.2.1.js"></script>
         <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
         <script src="modalJS.js"></script>
-        <title>Erbium Project</title>-->
+        <title>Erbium Project</title>
         <script>
             var trapArr;
             var userObject = {fullName:"", username:"", latitude:0.0, longitude:0.0};
@@ -35,7 +35,41 @@
                         displayNumOfTraps();
                     }
                 });
+                $(document).ready(function(){
+                    $.get("getTraps.php", function(data, status){
+                        console.log("Data: " + data + "\nStatus: " + status);
+                        if(status == "success"){
+                            allTrapArr = JSON.parse(data);
+                            // console.log();
+                            //displayNumOfTraps();
+                            displayAllTraps();
+                        }
+                    });
+                });
+                function displayAllTraps(){
+                    var table = document.getElementById("allTrapTable");//document.createElement("table");
+                    for(var i =0;i<allTrapArr.length;i++){
+                        var row = document.createElement("tr");
+                        var currentRow = table.rows[i];
+                        var createClickHandler = function(row){
+                            return function(){
+                                var cell = row.getElementsByTagName("td")[0];
+                                var id = cell.innerHTML;
+                                //alert("id: " + id);
+                                //document.getElementById("clientDeleteId").value = id;
+                            }
+                        }
 
+                        for(var j=0;j<allTrapArr[i].length;j++){
+                            var cell = document.createElement("td");
+                            cell.style.border = "1 px solid yellow";
+                            cell.textContent = allTrapArr[i][j];
+                            row.appendChild(cell);
+                        }
+                        table.appendChild(row);
+                        currentRow.onclick = createClickHandler(currentRow);
+                    }
+                }
                 //Get Name
                 $.get("user_details.php", function(data, status){
                     console.log("User data: ")
@@ -88,6 +122,7 @@
                 var name = tempName;
                 var TrapType = type;
                 var UploadInt = upload;
+                var bat_perc = battery;
                  numOfTraps++;
                 //var tempName = prompt("Please enter a temp name for testing","");
                 var iDiv = document.createElement('div');
@@ -117,19 +152,40 @@
                     tempLbl.innerHTML = "<br> Trap Temp: <br>";
                 var humidLbl = document.createElement("label");
                     humidLbl.innerHTML = "Trap Humidity: <br>";
+                var device_bat = document.createElement("label");
+                device_bat.innerHTML = "Battery %: " + bat_perc + "<br>";
+
+					if(bat_perc < 50 && bat_perc >= 30){
+						device_bat.style.color = "yellow";
+					}
+					else if(bat_perc < 30){
+						device_bat.style.color = "red";
+					}
+					else{
+						device_bat.style.color = "green";
+					}
+
                 var tempText = document.createElement("input");
-                    tempText.type = "text";
-                    tempText.id = "tempText";
-                    tempText.value = "23";
+					tempText.type = "text";
+					tempText.id = "tempText";
+					tempText.value = "23";
 					tempText.style.width = "50px";
+					tempText.style.color = "white";
+					tempText.style.backgroundColor = "rgba(0,0,0,0)";
+					tempText.style.outline = "none";
+					tempText.style.border = "none";
                 var humidText = document.createElement("input");
-                    humidText.type = "text";
-                    humidText.id = "humidText";
-                    humidText.value = "12";
+					humidText.type = "text";
+					humidText.id = "humidText";
+					humidText.value = "12";
 					humidText.style.width = "50px";
+					humidText.style.color = "white";
+					humidText.style.backgroundColor = "rgba(0,0,0,0)";
+					humidText.style.outline = "none";
+					humidText.style.border = "none";
                 var tokenText = document.createElement("header");
-                    tokenText.innerHTML = "Caught: " + token;
-                    tokenText.style.fontSize = "30px";
+					tokenText.innerHTML = "Caught: " + token;
+					tokenText.style.fontSize = "30px";
 
                 document.getElementById("traps").appendChild(iDiv);
                 var iHeader = document.createElement('header');
@@ -138,8 +194,11 @@
                 iDiv.appendChild(clickMe);
                 iDiv.appendChild(deleteTrap);
                 iDiv.appendChild(tokenText);
-                iDiv.appendChild(tempLbl);iDiv.appendChild(tempText);
-                iDiv.appendChild(humidLbl);iDiv.appendChild(humidText);
+                iDiv.appendChild(tempLbl);
+                iDiv.appendChild(tempText);
+                iDiv.appendChild(humidLbl);
+                iDiv.appendChild(humidText);
+                iDiv.appendChild(device_bat);
                 
                 //document.getElementById("clickInfo").onclick = function(){
                     /* if(trapClick() == "yes")
@@ -203,14 +262,21 @@
             function addTrap(){
                 document.getElementById("modal2").style.visibility = "visible";
             }
-			function displayGraphs(){
-			document.getElementById("Traps").style.display = "none";
-			document.getElementById("Graphs").style.display = "block";
-			}
-			function displayTraps(){
-			document.getElementById("Traps").style.display = "block";
-			document.getElementById("Graphs").style.display = "none";
-			}
+            function displayGraphs(){
+                document.getElementById("Traps").style.display = "none";
+                document.getElementById("Graphs").style.display = "block";
+                document.getElementById("Admin").style.display = "none";
+            }
+            function displayTraps(){
+                document.getElementById("Traps").style.display = "block";
+                document.getElementById("Graphs").style.display = "none";
+                document.getElementById("Admin").style.display = "none";
+            }
+            function displayAdmin(){
+                document.getElementById("Traps").style.display = "none";
+                document.getElementById("Graphs").style.display = "none";
+                document.getElementById("Admin").style.display = "block";
+            }
 			$(document).ready(function(){
 				$("#trapAddButton").click(function(){
 					$("#addTrapModal").modal('show');
@@ -223,6 +289,20 @@
 				});
 				
 			});
+            function validateAddClient(){
+                var pw1 = document.getElementById("pw1").value;
+                var pw2 = document.getElementById("pw2").value
+                if(pw1=="" || pw2 == ""){
+                    alert("Please enter a password");
+                    preventDefault();
+                }
+                else if(pw1 != pw2){
+                    alert("Please make sure the passwords match");
+                    return false;
+                }
+                else
+                    document.getElementById("clientForm").submit();
+            }
         </script>
     </head>
 
@@ -263,7 +343,7 @@
 				<div class="collapse navbar-collapse" id="myNavbar">
 					<ul class="nav navbar-nav">
 						<li><a href="contactus.html">Contact us<!--<span class="glyphicon glyphicon-info-sign"></span>--></a></li>
-						<li><a href="#">Settings<!--<span class="glyphicon glyphicon-cog"></span>--></a></li>
+						<li><a href="settings.html">Settings<!--<span class="glyphicon glyphicon-cog"></span>--></a></li>
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
@@ -282,14 +362,30 @@
         </div>-->
 
         <!-- Tab links openCity(event, 'Traps') -->
-        <div class="tab">
-          <button class="tablinks" id="trapTab" onclick="openCity(event, 'Traps')">Traps</button>
-          <button class="tablinks" onclick="openCity(event, 'Graphs')">Graphs</button>
-        </div>
+		<div class="tab">
+			<button class="tablinks" id="trapTab" onclick="openCity(event, 'Traps')">Traps</button>
+			<button class="tablinks" onclick="openCity(event, 'Graphs')">Graphs</button>
+			<button class="tablinks" onclick="openCity(event, 'Admin')">Admin</button>
+		</div>
 
+		<div id="Admin" class="tabcontent" style="background-color:rgba(0,0,0,0.5);height:1000px;color:white;">
+			<h2 style="text-align:center;">All traps per farm</h2>
+			<div id="alltraps">
+				<table border= "1" id="allTrapTable" style="background-color:white;color:black;">
+					<tr>
+						<th>DeviceID</th>
+						<th>ClientID</th>
+						<th>HardwareID</th>
+						<th>Caught</th>
+						<th>Type</th>
+						<th>Upload_interval</th>
+						<th>Battery % </th>
+					</tr>
+				</table>
+			</div>
+		</div>
 
-		
-		
+		</div>
         <div id="Traps" class="tabcontent">
         <!-- <p> Welcome <?php echo $_SESSION['fullname']; ?>. This is an overview of all the registered traps in your name<p><br> -->
         <button id="trapAddButton" class="buttons">Add Trap</button><br>
@@ -314,6 +410,7 @@
 						
 					</div>
 					<div class="modal-body">
+						<form method="POST" action="" id="trapEditForm">
 						Trap Type: <input type="text" id="editType"><br>
 						Hardware ID: <input type="text" id="editHardwareID"><br>
 						Upload Interval: <!--<input type="text" id="editUpload"><br>-->
@@ -329,6 +426,53 @@
 							<option value="Twiceperday">Twice per day</option>
 							<option value="Onceperday">Once per day</option>
 						</select>
+						<p><b>If you want to change to location of the trap you can do so below, otherwise leave blank</b></p>
+						<div id="editMap" style="width:425px;height:220px;"></div>
+
+						<script>
+                            var myLat;
+                            var myLong;
+                            function myMap() {
+                                var mapProp= {
+                                    center:new google.maps.LatLng(-25.755417,28.230767),
+                                    zoom:13,
+                                };
+                                var map=new google.maps.Map(document.getElementById("editMap"),mapProp);
+
+                                google.maps.event.addListener(map, 'click', function(event) {
+                                    //myLat = event.latLng.lat();
+                                    //myLong = event.LatLng.lng();
+                                    //alert(myLat);
+                                    document.getElementById("lblLat").value = event.latLng.lat();
+                                    myLat = document.getElementById("lblLat").innerHTML;
+                                    document.getElementById("lblLong").value = event.latLng.lng();
+                                    myLong = document.getElementById("lblLong").innerHTML;
+                                });
+                                map.addListener('click', function(e) {
+                                    //myLong = e.;
+                                    //alert("ok: " + myLong);
+                                    placeMarker(e.latLng, map);
+                                });
+
+                            }
+                            var marker;
+                            function placeMarker(position, map) {
+                                if (marker && marker.setMap) {
+                                    marker.setMap(null);
+                                }
+                                marker = new google.maps.Marker({
+                                    position: position,
+                                    map: map
+                                });
+                                map.panTo(position);
+                            }
+
+						</script>
+
+						<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myMap" type="text/javascript"></script>
+						<label>Lat: </label><input type="text" id="lblLat" name="editTrapLat">
+						<label>Long: </label><input type="text" id="lblLong" name="editTrapLong"><br>
+						</form>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -373,10 +517,10 @@
 						//myLat = event.latLng.lat();
 						//myLong = event.LatLng.lng();
 						//alert(myLat);
-						document.getElementById("lblLat").value = event.latLng.lat();
-						myLat = document.getElementById("lblLat").innerHTML;
-						document.getElementById("lblLong").value = event.latLng.lng();
-						myLong = document.getElementById("lblLong").innerHTML;
+						document.getElementById("lblLat2").value = event.latLng.lat();
+						myLat = document.getElementById("lblLat2").innerHTML;
+						document.getElementById("lblLong2").value = event.latLng.lng();
+						myLong = document.getElementById("lblLong2").innerHTML;
 					});
 					map.addListener('click', function(e) {
 						//myLong = e.;
@@ -400,8 +544,8 @@
                 </script>
 
 			<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myMap" type="text/javascript"></script>
-			 <label>Lat: </label><input type="text" id="lblLat" name="trapLat">
-			 <label>Long: </label><input type="text" id="lblLong" name="trapLong"><br>
+			 <label>Lat: </label><input type="text" id="lblLat2" name="trapLat">
+			 <label>Long: </label><input type="text" id="lblLong2" name="trapLong"><br>
         			
 					
         		</form>
@@ -506,29 +650,13 @@
                 <!-- <!-- <button onclick="document.location.reload()">Submit</button> --> -->
 
         <!-- </div> -->
-		
-        <div id="traps"> <!-- traps will be displayed in here -->
 
-        </div>
+			<div id="traps"> <!-- traps will be displayed in here -->
+
+			</div>
 		</div>
-        <div id="Graphs" >
-        <label style ="margin-left: 300px">Start Date :</label> <input type="text" id="start" style="margin-left: 20px">
-        <label style="margin-left: 20px">End Date :</label> <input type="text" id="start" style="margin-left: 20px">
-
-
-        <label style="margin-left: 20px">Filter :</label>
-        <select>
-          <option value="individual">Individual</option>
-          <option value="groups">Groups</option>
-        </select><br><br>
-
-
-        <div id="heading"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-        <button style ="width: 130px;margin-left: 160px;">Export</button>
-        <button style ="margin-left: 20px;width: 130px">Email</button>
-        <button style ="margin-left: 20px;width: 130px">Print</button>
-
-        </div>
+		<div id="Graphs" class="tabcontent">
+			<h1>Graphs</h1>
 		</div>
     </body>
 </html>
