@@ -11,7 +11,7 @@
 
 //TODO
 
-    $sql = "SELECT  client_id, hardware_id, token, type, Upload_Interval, caught from device";
+    $sql = "SELECT  client_id, hardware_id, token, type, Upload_Interval, Battery_Percent caught from device";
     $result = $conn->query($sql);
     $counter = 0;
 	
@@ -22,7 +22,7 @@
 			# code...
 			if($row["client_id"] == $active_client)
 			{
-                $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"]);
+                $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"],$row["Battery_Percent"]);
 				//$returnedString .=  $row["hardware_id"].' '.$row["type"]."\n";
             }
             $counter = $counter + 1;
