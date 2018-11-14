@@ -15,8 +15,9 @@ if ($conn->connect_error) {
 
 $sum = 0.0;
 $deviceID = $_POST["device_id"];
+$validity_time = time() - 86400;
 
-$sql = "SELECT  * from temp_humid where device_id = '$deviceID'";
+$sql = "SELECT  * from temp_humid where device_id = '$deviceID' AND time_stamp >= '$validity_time'";
 $result = $conn->query($sql);
 $size = $result->num_rows;
 if($size > 0)
