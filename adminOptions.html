@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Options</title>
+    <link rel="stylesheet" type="text/css" href="adminOptions.css">
+    <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <script src="jquery-3.2.1.js"></script>
+    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="main.html">Erbium Insect Tracker</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+
+            <li class="nav-item">
+                <a class="nav-link" href="contactus.html">contact us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="adminOptions.html">Admin</a>
+            </li>
+        </ul>
+        <div class="dropdown-menu" aria-labelledby="navDropDownLink">
+            <a class="dropdown-item" href="#">Preferences</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Logout</a>
+        </div>
+
+    </div>
+</nav>
+<h2 style="text-align: center;">Please choose an option to view or edit</h2>
+<div id="wrapper">
+    <button id="traps" class="button" onclick="window.location.href='viewTraps.php'">Traps</button>
+    <button id="clients" class="button" onclick="window.location.href='viewClients.php'">Clients</button>
+</div>
+
+</body>
+</html>

@@ -15,21 +15,19 @@ if ($conn->connect_error) {
 
 $deviceID = $_POST["device_id"];
 $active_hardware = $_POST["hardware"];
-$active_token = $_POST["token"];
 $active_type = $_POST['type'];
 $active_uploadInterval = $_POST['upload_interval'];
 
 $sql = "UPDATE device
         SET hardware_id = '$active_hardware',
-            token = '$active_token',
             type = '$active_type',
             Upload_Interval = '$active_uploadInterval'
-        WHERE device_id = '$deviceID';";
+        WHERE hardware_id = '$deviceID';";
 
 if($conn->query($sql) === true){
     $conn->close();
-    echo 1;
+    header("Location:main.html");
 }else{
     $conn->close();
-    echo 0;
+    header("Location:main.html");
 }

@@ -30,7 +30,7 @@
 			VALUES ('$active_fullname','$active_username','$active_password','$active_lat','$active_long')";
 			
 	if ($conn->query($sql) === TRUE) {
-    header("Location:settings.html");
+    header("Location:viewClients.php");
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;
 }

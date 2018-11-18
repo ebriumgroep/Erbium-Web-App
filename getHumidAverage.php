@@ -14,6 +14,7 @@ if ($conn->connect_error) {
 }
 
 $sum = 0.0;
+//$deviceID = $_POST["device_id"];
 $deviceID = $_POST["device_id"];
 $validity_time = time() - 86400;
 
@@ -26,10 +27,10 @@ if($size > 0)
         $sum += $row["humidity"];
     }
     $conn->close();
-    echo $sum/$size;
+    echo json_encode($sum/$size);//$sum/$size;
 
 }else{
     $conn->close();
-    echo $sum;
+    echo json_encode($sum);//$sum;
 }
 return;

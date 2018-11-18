@@ -26,10 +26,10 @@ if($size > 0)
         $sum += $row["temperature"];
     }
     $conn->close();
-    echo $sum/$size;
+    echo json_encode($sum/$size);
 
 }else{
     $conn->close();
-    echo $sum;
+    echo json_encode($sum);
 }
 return;
