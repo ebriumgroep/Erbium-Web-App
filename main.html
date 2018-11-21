@@ -8,6 +8,9 @@
         <script src="jquery-3.2.1.js"></script>
         <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
         <script src="modalJS.js"></script>
+		<script src="js/fusioncharts.js"></script>
+		<script src="js/fusioncharts.charts.js"></script>
+		<script src="js/themes/fusioncharts.theme.zune.js"></script>
         <title>Erbium Project</title>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
 
@@ -122,35 +125,6 @@
                                         //alert(trapArr[i][j] + " ");
                                         
                                     }
-                                    //var tempHumid=0;
-                                    //var tempTemp=0;
-                                   /* $.ajax({
-                                        type: 'post',
-                                        url: 'getHumidAverage.php',
-                                        data: "device_id="+ trapArr[i][5],
-                                        dataType: 'json',
-                                        success: function(response) {
-                                            //here I'd like back the php query
-											//tempHumid = response;
-                                            alert(response);
-											AjaxCallBackHumid(response);
-											//alert(tempHumid);
-                                        }
-                                    });
-                                    $.ajax({
-                                        type: 'post',
-                                        url: 'getTempAverage.php',
-                                        data: "device_id="+ trapArr[i][5],
-                                        dataType: 'json',
-                                        success: function(response) {
-                                            //here I'd like back the php query
-                                            //tempTemp = response;
-
-											AjaxCallBackTemp(response);
-                                            //alert(tempTemp);
-                                        }
-                                    });*/
-                                    //alert(tempHumid);
                                     const id = trapArr[i][5];
 									const hid = trapArr[i][0];
                                     const c = trapArr[i][1];
@@ -167,9 +141,6 @@
                                             addTrapDiv(hid, c, t, u,b,someElement1,someElement);
                                         });
                                     });
-
-                                    //array format = hardware id, token, type, upload
-									//alert(tempHumid);
                                     //addTrapDiv(trapArr[i][0], trapArr[i][1], trapArr[i][2], trapArr[i][3],trapArr[i][4],tempHumid,tempTemp);
                                 }
                 document.getElementById("trapNo").innerHTML = "The number of traps atm is: " + numOfTraps;
@@ -263,44 +234,9 @@
                 iDiv.appendChild(humidLbl);
                 iDiv.appendChild(humidText);
                 iDiv.appendChild(device_bat);
-                
-                //document.getElementById("clickInfo").onclick = function(){
-                    /* if(trapClick() == "yes")
-                    {
-                        this.parentElement.removeChild(this);
-                        numOfTraps--;
-                        displayNumOfTraps();
-                    } */
-                    // Get the modal
-                            // var modal = document.getElementById('myModal');
-                            // // Get the image and insert it inside the modal - use its "alt" text as a caption
-                            // //var mainModal = document.getElementById('clickInfo');
-                            // //var modalImg = document.getElementById("img01");
-                            // var captionText = document.getElementById("caption");
-                            // clickMe.onclick = function(){
-                            //     modal.style.display = "block";
-                            //     document.getElementById("myModel").appendChild(test);
-                            // }
-                            
-                            // // Get the <span> element that closes the modal
-                            // var span = document.getElementsByClassName("close")[0];
-                            
-                            // // When the user clicks on <span> (x), close the modal
-                            // span.onclick = function() { 
-                        
-                            //     modal.style.display = "none";
-                           // }
-                //} 
-                 
-                //displayNumOfTraps();
 
             }
-            // function trapClick(){
-                // if(confirm("Delete?"))
-                    // return "yes";
-                // else
-                    // return "no";
-            // }
+
             //for the tab    
             function openCity(evt, cityName) {
                 // Declare all variables
@@ -372,11 +308,63 @@
                 element.parentNode.removeChild(element);
 
 			}
+			//initiate the google maps in the add trap and edit trap divs - so that you can display 2 on 1 html page
 			function init(){
                 myMap2();
                 myMap();
-
             }
+            //-----------------------------------------------------------------
+            //chart javascript
+        var chartData1;
+        var chartData2;
+        var chartData3;
+        $.get("getGraphInfo.php", function(data, status){
+            console.log("Data: " + data + "\nStatus: " + status);
+            if(status === "success"){
+                chartData1 = JSON.parse(data);
+                chartData2 = JSON.parse(data);
+                var chartProperties1 = {
+                    "caption": "Number of moths caught in traps",
+                    "xAxisName": "Hardware ID",
+                    "yAxisName": "Caught",
+                    "rotatevalues": "1",
+                    "theme": "zune"
+                };
+                Chart1 = new FusionCharts({
+                    type: 'column2d',
+                    renderAt: 'MothsCaughtColumn',
+                    width: '550',
+                    height: '350',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": chartProperties1,
+                        "data": chartData1
+                    }
+                });
+                var chartProperties2 = {
+                    "caption": "Number of moths caught in traps",
+                    "xAxisName": "Hardware ID",
+                    "yAxisName": "Caught",
+                    "rotatevalues": "1",
+                    "theme": "zune"
+                };
+                Chart2 = new FusionCharts({
+                    type: 'pie2d',
+                    renderAt: 'MothsCaughtPie',
+                    width: '550',
+                    height: '350',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": chartProperties2,
+                        "data": chartData2
+                    }
+                });
+                Chart1.render();
+                Chart2.render();
+            }
+        });
+        //end chart JS
+		//------------------------------------------------------------------------------
         </script>
     </head>
 
@@ -397,11 +385,11 @@
 						<a class="nav-link" href="adminOptions.html" id="adminLink">Admin</a>
 					</li>
 				</ul>
-				<div class="dropdown-menu" aria-labelledby="navDropDownLink">
-					<a class="dropdown-item" href="#">Preferences</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Logout</a>
-				</div>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a class="nav-link" href="logout.php" id="Out">Logout</a>
+					</li>
+				</ul>
 
 			</div>
 		</nav>
@@ -597,7 +585,11 @@
 			</div>
 		</div>
 		<div id="Graphs" class="tabcontent">
-			<h1>Graphs</h1>
+			<div id="MothsCaughtColumn">FusionCharts will render here</div>
+			<div id="MothsCaughtPie">FusionCharts will render here</div>
+			<div id="chart-container">FusionCharts will render here</div>
+			<div id="chart-container">FusionCharts will render here</div>
+			<div id="chart-container">FusionCharts will render here</div>
 		</div>
     </body>
 </html>
