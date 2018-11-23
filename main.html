@@ -313,56 +313,59 @@
                 myMap2();
                 myMap();
             }
+            function makeGraphs(){
+                var chartData1;
+                var chartData2;
+                var chartData3;
+                $.get("getGraphInfo.php", function(data, status){
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    if(status === "success"){
+                        chartData1 = JSON.parse(data);
+                        chartData2 = JSON.parse(data);
+                        var chartProperties1 = {
+                            "caption": "Number of moths caught in traps",
+                            "xAxisName": "Hardware ID",
+                            "yAxisName": "Caught",
+                            "rotatevalues": "1",
+                            "theme": "zune"
+                        };
+                        Chart1 = new FusionCharts({
+                            type: 'column2d',
+                            renderAt: 'MothsCaughtColumn',
+                            width: '550',
+                            height: '350',
+                            dataFormat: 'json',
+                            dataSource: {
+                                "chart": chartProperties1,
+                                "data": chartData1
+                            }
+                        });
+                        var chartProperties2 = {
+                            "caption": "Number of moths caught in traps",
+                            "xAxisName": "Hardware ID",
+                            "yAxisName": "Caught",
+                            "rotatevalues": "1",
+                            "theme": "zune"
+                        };
+                        Chart2 = new FusionCharts({
+                            type: 'pie2d',
+                            renderAt: 'MothsCaughtPie',
+                            width: '550',
+                            height: '350',
+                            dataFormat: 'json',
+                            dataSource: {
+                                "chart": chartProperties2,
+                                "data": chartData2
+                            }
+                        });
+                        Chart1.render();
+                        Chart2.render();
+                    }
+                });
+			}
             //-----------------------------------------------------------------
             //chart javascript
-        var chartData1;
-        var chartData2;
-        var chartData3;
-        $.get("getGraphInfo.php", function(data, status){
-            console.log("Data: " + data + "\nStatus: " + status);
-            if(status === "success"){
-                chartData1 = JSON.parse(data);
-                chartData2 = JSON.parse(data);
-                var chartProperties1 = {
-                    "caption": "Number of moths caught in traps",
-                    "xAxisName": "Hardware ID",
-                    "yAxisName": "Caught",
-                    "rotatevalues": "1",
-                    "theme": "zune"
-                };
-                Chart1 = new FusionCharts({
-                    type: 'column2d',
-                    renderAt: 'MothsCaughtColumn',
-                    width: '550',
-                    height: '350',
-                    dataFormat: 'json',
-                    dataSource: {
-                        "chart": chartProperties1,
-                        "data": chartData1
-                    }
-                });
-                var chartProperties2 = {
-                    "caption": "Number of moths caught in traps",
-                    "xAxisName": "Hardware ID",
-                    "yAxisName": "Caught",
-                    "rotatevalues": "1",
-                    "theme": "zune"
-                };
-                Chart2 = new FusionCharts({
-                    type: 'pie2d',
-                    renderAt: 'MothsCaughtPie',
-                    width: '550',
-                    height: '350',
-                    dataFormat: 'json',
-                    dataSource: {
-                        "chart": chartProperties2,
-                        "data": chartData2
-                    }
-                });
-                Chart1.render();
-                Chart2.render();
-            }
-        });
+
         //end chart JS
 		//------------------------------------------------------------------------------
         </script>
@@ -396,7 +399,7 @@
         <!-- Tab links openCity(event, 'Traps') -->
 		<div class="tab">
 			<button class="tablinks" id="trapTab" onclick="openCity(event, 'Traps')">Traps</button>
-			<button class="tablinks" onclick="openCity(event, 'Graphs')">Graphs</button>
+			<button class="tablinks" onclick="openCity(event, 'Graphs');makeGraphs()">Graphs</button>
 			<button class="tablinks" onclick="openCity(event, 'Admin')">Settings</button>
 		</div>
 
