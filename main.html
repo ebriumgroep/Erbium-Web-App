@@ -18,6 +18,7 @@
 		var trapArr;
             var allTrapArr;
             var userObject = {fullName:"", username:"", latitude:0.0, longitude:0.0};
+            var clientDeviceIdArray= [];
 			//test if admin is logged in -> if so then enable admin link
 
             $(document).ready(function(){
@@ -141,6 +142,8 @@
                                             addTrapDiv(hid, c, t, u,b,someElement1,someElement);
                                         });
                                     });
+									clientDeviceIdArray.push(id);
+									numOfTraps++;
                                     //addTrapDiv(trapArr[i][0], trapArr[i][1], trapArr[i][2], trapArr[i][3],trapArr[i][4],tempHumid,tempTemp);
                                 }
                 document.getElementById("trapNo").innerHTML = "The number of traps atm is: " + numOfTraps;
@@ -174,6 +177,7 @@
                 deleteTrap.innerHTML = "Delete";
                 deleteTrap.id = "deleteTrap";
                 deleteTrap.onclick = function() {
+
                     $.get("deleteTrap.php", {hardwareId:tempName}, function(data, status){
                         console.log("Removed:"+status);
                         // if(data !== ""){
@@ -362,6 +366,42 @@
                         Chart2.render();
                     }
                 });
+                for(i=0;i<=clientDeviceIdArray.length;i++){
+                    var element = 0;
+                    $.ajax({
+                        type: 'post',
+                        url: 'getTempAverage.php',
+                        data: "device_id="+ clientDeviceIdArray[i],
+                        dataType: 'json',
+                        success: function(response) {
+                            var content = response;
+                            element = content;
+
+                            callback(element);
+                            chartData1 = content;
+                            var chartProperties1 = {
+                                "caption": "Average Temp per trap",
+                                "xAxisName": "Hardware ID",
+                                "yAxisName": "Avg Temp",
+                                "rotatevalues": "1",
+                                "theme": "zune"
+                            };
+                            Chart1 = new FusionCharts({
+                                type: 'column2d',
+                                renderAt: 'averageTempColumn',
+                                width: '550',
+                                height: '350',
+                                dataFormat: 'json',
+                                dataSource: {
+                                    "chart": chartProperties1,
+                                    "data": chartData1
+                                }
+                            });
+                            Chart1.render();
+                        }
+                });
+				}
+
 			}
             //-----------------------------------------------------------------
             //chart javascript
@@ -374,7 +414,7 @@
 
     <body onload="openCity(event, 'Traps')">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="#">Erbium Insect Tracker </a>
+			<a class="navbar-brand" href="main.html">Erbium Insect Tracker </a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -590,9 +630,9 @@
 		<div id="Graphs" class="tabcontent">
 			<div id="MothsCaughtColumn">FusionCharts will render here</div>
 			<div id="MothsCaughtPie">FusionCharts will render here</div>
-			<div id="chart-container">FusionCharts will render here</div>
-			<div id="chart-container">FusionCharts will render here</div>
-			<div id="chart-container">FusionCharts will render here</div>
+			<div id="averageTempColumn">FusionCharts will render here</div>
+			<div id="">FusionCharts will render here</div>
+			<div id="">FusionCharts will render here</div>
 		</div>
     </body>
 </html>
