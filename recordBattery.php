@@ -23,9 +23,9 @@ WHERE device_id = '$deviceID';";
 
 if($conn->query($sql) === true){
     $conn->close();
-    echo '1';
+    echo 'SUCCESS';
 }
 else{
     $conn->close();
-    echo '0';
+    echo 'FAILURE';
 }

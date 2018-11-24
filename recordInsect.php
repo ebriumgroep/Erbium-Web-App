@@ -20,11 +20,10 @@
 
         $conn->close();
         //echo "Successful";
-        echo '1';
+        echo 'SUCCESS';
     }
     else{
         $conn->close();
         //echo "Not Successful";
-        echo '0';
+        echo 'FAILURE';
     }
-?>
