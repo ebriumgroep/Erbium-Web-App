@@ -6,4 +6,4 @@
  * Time: 11:47
  */
 
-echo time();
+echo '{'.time().'}';

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 09, 2018 at 08:35 AM
+-- Generation Time: Nov 17, 2018 at 09:40 PM
 -- Server version: 5.7.19
 -- PHP Version: 5.6.31
 
@@ -76,9 +76,9 @@ CREATE TABLE IF NOT EXISTS `device` (
 
 INSERT INTO `device` (`device_id`, `client_id`, `hardware_id`, `token`, `type`, `Upload_Interval`, `caught`, `tempCount`, `Battery_Percent`) VALUES
 (20, 21, 'sac_6', '5', 'Butterflies', 'FivePerDay', 7, 0, 0),
-(21, 21, 'sac1', '0', 'Moths', 'fiveperday', 3, 4, 0),
+(21, 21, 'sac1', '0', 'Moths', 'fiveperday', 3, 10, 77),
 (22, 21, 'sac2', '0', 'Moths', 'Everyhour', 1, 0, 0),
-(23, 21, 'sac3', '0', 'Moths', 'Everyhour', 5, 0, 0),
+(23, 21, 'sac3', '0', 'Moths', 'Everyhour', 5, 0, 45),
 (24, 21, 'sac99', '88', 'Butterflies', 'onceperday', 2, 0, 0),
 (25, 21, 'sac5', '0', 'Moths', 'onceperday', 12, 0, 0);
 
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `temp_humid` (
   `device_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`th_id`),
   KEY `device_id_idx` (`device_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `temp_humid`
@@ -122,7 +122,13 @@ INSERT INTO `temp_humid` (`th_id`, `temperature`, `humidity`, `time_stamp`, `dev
 (2, 36.5, 89.56, 1540837457, 21),
 (3, 36.5, 89.56, 1540837457, 21),
 (4, 36.5, 89.56, 1540837457, 21),
-(5, 36.5, 89.56, 1540837457, 21);
+(5, 36.5, 89.56, 1540837457, 21),
+(6, 36.5, 89.56, 1540837457, 21),
+(7, 40.5, 93.56, 1542231477, 21),
+(8, 28.5, 50.56, 1542231477, 21),
+(9, 27.5, 49.56, 1542231477, 21),
+(10, 35.5, 100.33, 1542231477, 21),
+(11, 25.5, 77.33, 1542231477, 21);
 
 -- --------------------------------------------------------
 
