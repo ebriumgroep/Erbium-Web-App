@@ -95,17 +95,7 @@ body{
     
     border-top: none;
 }
-.trap {
-    background: #000000;
-    height: 230px;
-    width:200px;
-    margin-left: 20px;
-    margin-top: 10px;
-    float:left;
-    color: white;
-    border-radius: 10px;
-    padding:10px;
-}
+
 #heading {
             margin:auto;
             width: 800px;
@@ -136,12 +126,24 @@ body{
     display: inline-block;
     font-size: 16px;
 }
-#traps{
+#trapsDisplay{
     border:1px solid black;
     min-height: 100px;
     overflow: hidden;
     background-color:rgba(0, 0, 0, 0.5);
+    display:table;
 	
+}
+.trap {
+    background: #000000;
+    height: 230px;
+    width:220px;
+    margin-left: 20px;
+    margin-top: 10px;
+    float:left;
+    color: white;
+    border-radius: 10px;
+    padding:10px;
 }
 #Traps{
     background-color:rgba(0, 0, 0, 0.5);

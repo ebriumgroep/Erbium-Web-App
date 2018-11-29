@@ -11,12 +11,16 @@
 		<script src="js/fusioncharts.js"></script>
 		<script src="js/fusioncharts.charts.js"></script>
 		<script src="js/themes/fusioncharts.theme.zune.js"></script>
-        <title>Erbium Project</title>
-		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
-
+		<script src="tinysort.js"></script>
+        <script src="tinysort.min.js"></script>
+		<title>Erbium Project</title>
+		<script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript"></script>
         <script>
 		var trapArr;
-            var allTrapArr;
+		var trapArrSortByCaught;//for sorting
+		var allTrapArr;
+		var farmLat;
+		var farmLong;
             var userObject = {fullName:"", username:"", latitude:0.0, longitude:0.0};
             var clientDeviceIdArray= [];
 			//test if admin is logged in -> if so then enable admin link
@@ -29,13 +33,17 @@
                     console.log("Data: " + data + "\nStatus: " + status);
                     if(status === "success"){
                         trapArr = JSON.parse(data);
+                        /*trapArrSortByCaught = trapArr;
+                        console.log(trapArrSortByCaught.sort(function(a, b) {
+                            return b[1] - a[1];
+                        }));*/
                         // console.log();
-                        displayNumOfTraps();
+                        displayNumOfTraps(trapArr);
                     }
                 });
                 $(document).ready(function(){
                     $.get("getTraps.php", function(data, status){
-                        console.log("Data: " + data + "\nStatus: " + status);
+                        //console.log("Data: " + data + "\nStatus: " + status);
                         if(status == "success"){
                             allTrapArr = JSON.parse(data);
                             // console.log();
@@ -44,7 +52,8 @@
                         }
                     });
                 });
-
+				var myLat;
+				var myLong;
                 //Get Name
                 $.get("user_details.php", function(data, status){
                     console.log("User data: ")
@@ -55,12 +64,15 @@
                         userObject.username = data[1];
                         userObject.latitude = data[2];
                         userObject.longitude = data[3];
+                        myLat = userObject.latitude;
+                        myLong = userObject.longitude;
                         document.getElementById("user_name").innerHTML = userName+'&nbsp;'+userObject.fullName;
                     }else{
                         document.getElementById("user_name").innerHTML = userName+"&nbsp;Undefined";
 
                     }
                 });
+
 
                 // document.getElementById('trapButton').click();
                 /*$('#logout').click(function(){
@@ -79,78 +91,130 @@
             // trapArr[3] = new Array("Moth","0981202","Every 2 hours");
 		var tempHumid = 0;
 		var tempTemp = 0;
-
-			function getHumid(id,callback){
-			    var element = 0;
-                $.ajax({
+		const arrayForHumid=[];
+		var arrayForTemp=[];
+        var temp;
+        let humid;
+        function storeTempHumid(id){
+            var t,h;
+            $.when(
+                $.ajax({ // First Request
+                    url: 'getTempAverage.php',
                     type: 'post',
-                    url: 'getHumidAverage.php',
                     data: "device_id="+ id,
                     dataType: 'json',
-                    success: function(response) {
-                        var content = response;
-                        element = content;
-
-                        callback(element);
-                        //AjaxCallBackHumid(response);
-                        //alert(tempHumid);
+                    cache: false,
+                    success: function(returnhtml){
+                        t = returnhtml;
                     }
-                });
-			}
-        function getTemp(id,callback){
-            var element = 0;
-            $.ajax({
-                type: 'post',
-                url: 'getTempAverage.php',
-                data: "device_id="+ id,
-                dataType: 'json',
-                success: function(response) {
-                    var content = response;
-                    element = content;
-
-                    callback(element);
-                    //AjaxCallBackHumid(response);
-                    //alert(tempHumid);
-                }
+                }),
+                $.ajax({ //Seconds Request
+                    url: 'getHumidAverage.php',
+                    type: 'post',
+                    data: "device_id="+ id,
+                    dataType: 'json',
+                    cache: false,
+                    success: function(returnhtml){
+                        h = returnhtml;
+                    }
+                }),
+            ).then(function() {
+                setTempHumid(id,t,h)
+               // console.log(t,h);
+                //addTrapDiv(hid, c, t, u,b,humid,temp);
+                // alert(humid + " temp: " + temp);
             });
         }
-            function displayNumOfTraps()
+        function setTempHumid(id,t,h){
+            temp = t;
+			/*var testArrayT = [];
+			testArrayT.push(id,t);
+            var testArrayH = [];
+            testArrayH.push(id,t);
+			//console.log(testArrayT);
+			arrayForTemp.push(testArrayT);
+            arrayForHumid.push(testArrayH);*/
+            arrayForTemp.push(id,t);
+            arrayForHumid.push(id,h);
+            //console.log(temp);
+            //humid = h;
+        }
+        function getHumidFromArray(id){
+            var value = arrayForHumid.indexOf(id);
+            return arrayForHumid[value+1];
+		}
+            function displayNumOfTraps(array)
             {
-
+                console.log(arrayForHumid);
+                trapArrSortByCaught = array;
                 // var trapArr = <?php echo $json_array; ?>;
-                for(i=0;i<trapArr.length;i++)
+                for(i=0;i<array.length;i++)
                                 {
+                                    let id = array[i][5];
+									let hid = array[i][0];
+                                    let c = array[i][1];
+                                    let t = array[i][2];
+                                    let u = array[i][3];
+                                    let b = array[i][4];
 
-                                    for(j=0;j<trapArr[i].length;j++)
-                                    {
-                                        //alert(trapArr[i][j] + " ");
-                                        
-                                    }
-                                    const id = trapArr[i][5];
-									const hid = trapArr[i][0];
-                                    const c = trapArr[i][1];
-                                    const t = trapArr[i][2];
-                                    const u = trapArr[i][3];
-                                    const b = trapArr[i][4];
-									getHumid(id, function(someElement1){
+                                    console.log(id,hid,c,t,u,b);
+									/*getHumid(id, function(someElement1){
 									    //alert(someElement);
 										tempHumid = someElement1;
 
                                         getTemp(id, function(someElement){
                                             //alert(someElement);
                                             tempTemp = someElement;
+
                                             addTrapDiv(hid, c, t, u,b,someElement1,someElement);
+                                            console.log(hid, c, t, u,b,someElement1,someElement);
                                         });
-                                    });
+                                    });*/
+									//getHumid(id);
+									//getTemp(id);
+									/*for(k=0;k<arrayForHumid.length;k++){
+									    if(arrayForHumid[k][0] == id){
+									        humid = arrayForHumid[k][1];
+										}
+									}
+                                    for(k=0;k<arrayForTemp.length;k++){
+                                        if(arrayForTemp[k][0] == id){
+                                            humid = arrayForTemp[k][1];
+                                        }
+                                    }
+                                    type: 'post',
+                url: 'getTempAverage.php',
+                async:false,
+                data: "device_id="+ id,
+                dataType: 'json',
+                                    */
+                                    //if successful
+									storeTempHumid(id);
+									//console.log(arrayForTemp);
+                                    /*for(k=0;k<=arrayForTemp.length;k++){
+                                        console.log(arrayForTemp);
+										for(l=0;l<=arrayForTemp[k].length;l++){
+                                            if(arrayForTemp[k][0] == id){
+                                                alert(arrayForTemp[k][1]);
+											}
+                                        }
+                                    }*/
+                                    //console.log(arrayForHumid);
+									//console.log(getHumidFromArray(21));
+                                    addTrapDiv(hid, c, t, u,b,0,0);
+                                    //console.log(hid, c, t, u,b,humid,temp);
 									clientDeviceIdArray.push(id);
+									//allTrapLocations.push();
 									numOfTraps++;
                                     //addTrapDiv(trapArr[i][0], trapArr[i][1], trapArr[i][2], trapArr[i][3],trapArr[i][4],tempHumid,tempTemp);
                                 }
                 document.getElementById("trapNo").innerHTML = "The number of traps atm is: " + numOfTraps;
             }
 
+		    var no=0;
             function addTrapDiv(tempName,token,type,upload,battery,averageHumid,averageTemp)
             {
+                  no++;
                 //alert(averageHumid);
                 var name = tempName;
                 var TrapType = type;
@@ -158,11 +222,12 @@
                 var bat_perc = battery;
                 var tempHumid = averageHumid;
                 var tempTemp = averageTemp;
-                 numOfTraps++;
+                // numOfTraps++;
                 //var tempName = prompt("Please enter a temp name for testing","");
                 var iDiv = document.createElement('div');
                     iDiv.id = tempName;
                     iDiv.className = "trap";
+                    iDiv.name = no;
                     iDiv.onclick = function(){
                         document.getElementById("editHardwareID").value = name;
                         document.getElementById("upload_interval").value = UploadInt;
@@ -191,7 +256,7 @@
                 var humidLbl = document.createElement("label");
                     humidLbl.innerHTML = "Humid avr 24hr: <br>";
                 var device_bat = document.createElement("label");
-                device_bat.innerHTML = "Battery %: " + bat_perc + "<br>";
+                device_bat.innerHTML = "Battery: " + bat_perc + "%" + "<br>";
 
 					if(bat_perc < 50 && bat_perc >= 30){
 						device_bat.style.color = "yellow";
@@ -225,7 +290,7 @@
 					tokenText.innerHTML = "Caught: " + token;
 					tokenText.style.fontSize = "30px";
 
-                document.getElementById("traps").appendChild(iDiv);
+
                 var iHeader = document.createElement('header');
                 iHeader.innerHTML = "Hardware ID: " + tempName;
 
@@ -238,10 +303,10 @@
                 iDiv.appendChild(humidLbl);
                 iDiv.appendChild(humidText);
                 iDiv.appendChild(device_bat);
-
+                document.getElementById("trapsDisplay").appendChild(iDiv);
             }
 
-            //for the tab    
+            //for the tab
             function openCity(evt, cityName) {
                 // Declare all variables
                 var i, tabcontent, tablinks;
@@ -281,17 +346,35 @@
                 document.getElementById("Graphs").style.display = "none";
                 document.getElementById("Admin").style.display = "block";
             }
+			function enterAddTrap(e, textarea){
+				var code = (e.keyCode ? e.keyCode : e.which);
+				if(code == 13) { //Enter keycode
+					document.getElementById("addTrapButton").click();
+				}
+			}
+			function enterEditTrap(e, textarea){
+				var code = (e.keyCode ? e.keyCode : e.which);
+				if(code == 13) { //Enter keycode
+					document.getElementById("editTrapButton").click();
+				}
+			}
 			$(document).ready(function(){
 				$("#trapAddButton").click(function(){
 					$("#addTrapModal").modal('show');
 				});
-				
+
 			});
 			$(document).ready(function(){
 				$(document).on('click', "#editTButton", function() {
 					$("#editTrapModal").modal('show');
 				});
-				
+
+			});
+			$(document).ready(function(){
+				$(document).on('click', "#mapofTrapsClient", function() {
+					$("#allTrapsMapModal").modal('show');
+				});
+
 			});
             function validateAddClient(){
                 var pw1 = document.getElementById("pw1").value;
@@ -312,11 +395,7 @@
                 element.parentNode.removeChild(element);
 
 			}
-			//initiate the google maps in the add trap and edit trap divs - so that you can display 2 on 1 html page
-			function init(){
-                myMap2();
-                myMap();
-            }
+
             function makeGraphs(){
                 var chartData1;
                 var chartData2;
@@ -403,16 +482,107 @@
 				}
 
 			}
-            //-----------------------------------------------------------------
-            //chart javascript
+			function setSortDropDown(){
+                if(userObject.fullName != "User 111"){
+					document.getElementById("linkToAdmin").style.visibility = 'hidden';
+				}
+				else {
+                    document.getElementById("linkToAdmin").style.visibility = 'visible';
+				}
+                var eSelect = document.getElementById('sortDropdown');
+                var maintrapdiv = document.getElementById("trapsDisplay");
+                eSelect.onchange = function() {
+                    if(eSelect.selectedIndex === 1) {
+                        trapArrSortByCaught.sort(function(a, b) {
+                            return b[1] - a[1];
+                        });
+                        maintrapdiv.innerHTML = '';//delete child elements on div
+                        displayNumOfTraps(trapArrSortByCaught);
+                    } else if(eSelect.selectedIndex === 2){
+						//battery?
+                    }
+                }
+			}
+        function allTraps() {
+            // myMap();
+			//alert(userObject.longitude);
+            //Also store the farm location to be the centre point
+            var allTrapLocations = [
+                ['trap1','-25.758972931872734','28.231539476196303'],
+                ['trap2','-25.767166630316538','28.213600862304702'],
+                ['trap3','-25.75510778350059','28.25282548693849']
+            ];//to hold trap locations for user
+            //alert(myLong);
+            var map = new google.maps.Map(document.getElementById('allTrapsGoogleMap'), {
+                zoom: 13,
+                center: new google.maps.LatLng(userObject.latitude,userObject.longitude),
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            });
 
-        //end chart JS
-		//------------------------------------------------------------------------------
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            for (i = 0; i < allTrapLocations.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(allTrapLocations[i][1], allTrapLocations[i][2]),
+                    map: map
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(allTrapLocations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+        }
+        tinysort('#trapsDisplay > div',{attr: 'name'});
+            //-----------------------------------------------------------------
+        function getHumid(id){//,callback){
+            var element = 0;
+            $.ajax({
+                type: 'post',
+                url: 'getHumidAverage.php',
+                async:false,
+                data: "device_id="+ id,
+                dataType: 'json',
+                success: function(response) {
+                    /*var content = response;
+                    element = content;
+
+                    callback(element);*/
+                    //AjaxCallBackHumid(response);
+                    //alert(tempHumid);
+                    arrayForHumid.push(id,response);
+                    console.log(arrayForHumid);
+                }
+            });
+        }
+        function getTemp(id){
+            var element = 0;
+            $.ajax({
+                type: 'post',
+                url: 'getTempAverage.php',
+                async:false,
+                data: "device_id="+ id,
+                dataType: 'json',
+                success: function(response) {
+                    /*var content = response;
+                    element = content;
+
+                    callback(element);*/
+                    //AjaxCallBackHumid(response);
+                    //alert(tempHumid);
+                    arrayForTemp.push(id,response);
+                }
+            });
+        }
         </script>
     </head>
 
 
-    <body onload="openCity(event, 'Traps')">
+    <body onload="setSortDropDown();openCity(event, 'Traps')">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a class="navbar-brand" href="main.html">Erbium Insect Tracker </a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -424,7 +594,7 @@
 					<li class="nav-item">
 						<a class="nav-link" href="contactus.html">contact us</a>
 					</li>
-					<li class="nav-item">
+					<li class="nav-item" id="linkToAdmin">
 						<a class="nav-link" href="adminOptions.html" id="adminLink">Admin</a>
 					</li>
 				</ul>
@@ -453,7 +623,7 @@
         <button id="trapAddButton" class="buttons">Add Trap </button><br>
 
         <label id="trapNo" style="color:white; float:right;padding:0;margin:0;"></label><br>
-        <select style="float:right;">
+        <select style="float:right;" id="sortDropdown">
 			<option selected disabled>Sort Traps By  (choose option)</option>
 			<option value="numOfMoths">Number of moths</option>
 			<option value="Temp">Temprature</option>
@@ -461,7 +631,26 @@
 			<option value="GroupOrch">Group Orchard</option>
             <option value="Add another group">Add another group</option>
         </select><br><br>
+			<button onclick="sort()">SORT ME</button>
+		<button id="mapofTrapsClient">Map of all traps</button>
+			<div id="allTrapsMapModal" class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title" style="text-align:left;">Add Another Trap</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
+						</div>
+						<div class="modal-body">
+								<p>All traps</p>
+								<div id="allTrapsGoogleMap" style="width:425px;height:220px;"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div id="addTrapModal" class="modal fade">
 				<div class="modal-dialog">
 					<div class="modal-content">
@@ -471,8 +660,8 @@
 
 						</div>
 						<div class="modal-body">
-							<form method="POST" action="addTrap.php" id="trapForm">
-								Trap Type: <input type="text" required id="addTraptype" name="type"><br>
+							<form method="POST" action="addTrap.php" id="trapForm" onKeyPress="enterAddTrap(event, this)">
+								Trap Group: <input type="text" required id="addTraptype" name="type"><br>
 								Hardware ID: <input type="text" required  id="addTraphardware" name="hardware"><br>
 								Upload Interval: <!--<input type="text" id="editUpload"><br>-->
 								<select id="Trap_upload_interval"  required name="upload_interval">
@@ -485,43 +674,6 @@
 								<div id="googleMap" style="width:425px;height:220px;"></div>
 
 								<script>
-                                    var myLat;
-                                    var myLong;
-                                    function myMap() {
-                                        myMap2();
-                                        var mapProp= {
-                                            center:new google.maps.LatLng(-25.755417,28.230767),
-                                            zoom:13,
-                                        };
-                                        var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
-
-                                        google.maps.event.addListener(map, 'click', function(event) {
-                                            //myLat = event.latLng.lat();
-                                            //myLong = event.LatLng.lng();
-                                            //alert(myLat);
-                                            document.getElementById("lblLat2").value = event.latLng.lat();
-                                            myLat = document.getElementById("lblLat2").innerHTML;
-                                            document.getElementById("lblLong2").value = event.latLng.lng();
-                                            myLong = document.getElementById("lblLong2").innerHTML;
-                                        });
-                                        map.addListener('click', function(e) {
-                                            //myLong = e.;
-                                            //alert("ok: " + myLong);
-                                            placeMarker(e.latLng, map);
-                                        });
-
-                                    }
-                                    var marker;
-                                    function placeMarker(position, map) {
-                                        if (marker && marker.setMap) {
-                                            marker.setMap(null);
-                                        }
-                                        marker = new google.maps.Marker({
-                                            position: position,
-                                            map: map
-                                        });
-                                        map.panTo(position);
-                                    }
 
 								</script>
 <!--
@@ -535,7 +687,7 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<input type="submit" class="btn btn-primary" value="Add Trap" form="trapForm">
+							<input type="submit" class="btn btn-primary" value="Add Trap" form="trapForm" id="addTrapButton">
 						</div>
 					</div>
 				</div>
@@ -549,9 +701,9 @@
 						
 					</div>
 					<div class="modal-body">
-						<form method="POST" action="editTrap.php" id="trapEditForm">
+						<form method="POST" action="editTrap.php" id="trapEditForm" onKeyPress="enterEditTrap(event, this)">
 						<input type="text" hidden id="Tid" name="device_id">
-						Trap Type: <input type="text"  required id="editType" name="type"><br>
+						Trap Group: <input type="text"  required id="editType" name="type"><br>
 						Hardware ID: <input type="text"  required id="editHardwareID" name="hardware"><br>
 						Upload Interval: <!--<input type="text" id="editUpload"><br>-->
 						<select id="upload_interval" name="upload_interval">
@@ -570,43 +722,7 @@
 						<div id="editMap" style="width:425px;height:220px;"></div>
 
 						<script>
-                            var myLat;
-                            var myLong;
-                            function myMap2() {
-                                var mapProp= {
-                                    center:new google.maps.LatLng(-25.755417,28.230767),
-                                    zoom:13,
-                                };
-                                var map=new google.maps.Map(document.getElementById("editMap"),mapProp);
 
-                                google.maps.event.addListener(map, 'click', function(event) {
-                                    //myLat = event.latLng.lat();
-                                    //myLong = event.LatLng.lng();
-                                    //alert(myLat);
-                                    document.getElementById("lblLat").value = event.latLng.lat();
-                                    myLat = document.getElementById("lblLat").innerHTML;
-                                    document.getElementById("lblLong").value = event.latLng.lng();
-                                    myLong = document.getElementById("lblLong").innerHTML;
-                                });
-                                map.addListener('click', function(e) {
-                                    //myLong = e.;
-                                    //alert("ok: " + myLong);
-                                    placeMarker(e.latLng, map);
-                                });
-
-                            }
-                            var marker;
-                            function placeMarker(position, map) {
-                                if (marker && marker.setMap) {
-                                    marker.setMap(null);
-                                }
-                                marker = new google.maps.Marker({
-                                    position: position,
-                                    map: map
-                                });
-                                map.panTo(position);
-                            }
-                            myMap();
 						</script>
 
 						<!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myMap3" type="text/javascript"></script>-->
@@ -616,14 +732,14 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<input type="submit" class="btn btn-primary" value="Save Changes" form="trapEditForm">
+						<input type="submit" class="btn btn-primary" value="Save Changes" form="trapEditForm" id="editTrapButton">
 
 					</div>
 				</div>
 			</div>
 		</div>
 
-			<div id="traps"> <!-- traps will be displayed in here -->
+			<div id="trapsDisplay"> <!-- traps will be displayed in here -->
 
 			</div>
 		</div>
@@ -634,5 +750,88 @@
 			<div id="">FusionCharts will render here</div>
 			<div id="">FusionCharts will render here</div>
 		</div>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
+		<script>
+			function sort(){
+				tinysort('#trapsDisplay > div',{attr: 'name'});
+
+			}
+
+        //initiate the google maps in the add trap and edit trap divs - so that you can display 2 on 1 html page
+        function init(){
+            myMap();
+            myMap2();
+            function myMap() {
+                //myMap2();
+                //
+                // allTraps();
+                var mapProp= {
+                    center:new google.maps.LatLng(-25.755417,28.230767),
+                    zoom:13,
+                };
+                var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+                google.maps.event.addListener(map, 'click', function(event) {
+                    //myLat = event.latLng.lat();
+                    //myLong = event.LatLng.lng();
+                    //alert(myLat);
+                    document.getElementById("lblLat2").value = event.latLng.lat();
+                    myLat = document.getElementById("lblLat2").innerHTML;
+                    document.getElementById("lblLong2").value = event.latLng.lng();
+                    myLong = document.getElementById("lblLong2").innerHTML;
+                });
+                map.addListener('click', function(e) {
+                    //myLong = e.;
+                    //alert("ok: " + myLong);
+                    placeMarker(e.latLng, map);
+                });
+                var marker;
+                function placeMarker(position, map) {
+                    if (marker && marker.setMap) {
+                        marker.setMap(null);
+                    }
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map
+                    });
+                    map.panTo(position);
+                }
+            }
+            function myMap2() {
+                var mapProp= {
+                    center:new google.maps.LatLng(-25.755417,28.230767),
+                    zoom:13,
+                };
+                var map2=new google.maps.Map(document.getElementById("editMap"),mapProp);
+
+                google.maps.event.addListener(map2, 'click', function(event) {
+                    //myLat = event.latLng.lat();
+                    //myLong = event.LatLng.lng();
+                    //alert(myLat);
+                    document.getElementById("lblLat").value = event.latLng.lat();
+                    myLat = document.getElementById("lblLat").innerHTML;
+                    document.getElementById("lblLong").value = event.latLng.lng();
+                    myLong = document.getElementById("lblLong").innerHTML;
+                });
+                map2.addListener('click', function(e) {
+                    //myLong = e.;
+                    //alert("ok: " + myLong);
+                    placeMarker(e.latLng, map2);
+                });
+                var marker;
+                function placeMarker(position, map) {
+                    if (marker && marker.setMap) {
+                        marker.setMap(null);
+                    }
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map
+                    });
+                    map.panTo(position);
+                }
+            }
+            allTraps();
+        }
+	</script>
     </body>
 </html>

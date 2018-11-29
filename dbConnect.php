@@ -2,7 +2,7 @@
 	function connect_database(){
 		$servername = "localhost";
 	    $dUsername = "root";
-	    $dPassword = "root";
+	    $dPassword = "";
 		$db = "id7227985_erbium";
 
 		return new mysqli($servername, $dUsername, $dPassword, $db);

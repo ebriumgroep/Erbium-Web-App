@@ -22,6 +22,8 @@ include('viewClientsServer.php');
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
     <script src="jquery-3.2.1.js"></script>
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -39,11 +41,11 @@ include('viewClientsServer.php');
                 <a class="nav-link" href="adminOptions.html">Admin</a>
             </li>
         </ul>
-        <div class="dropdown-menu" aria-labelledby="navDropDownLink">
-            <a class="dropdown-item" href="#">Preferences</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Logout</a>
-        </div>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php" id="Out">Logout</a>
+            </li>
+        </ul>
 
     </div>
 </nav>
@@ -112,12 +114,53 @@ include('viewClientsServer.php');
 	</div>
 	<div class="input-group">
 		<label>Latitude</label>
-		<input type="text" required name="latitude" value="<?php echo $latitude ; ?>">
+		<input type="text" required name="latitude" id="lat" value="<?php echo $latitude ; ?>">
 	</div>
 	<div class="input-group">
 		<label>Longitude</label>
-		<input type="text" required name="longitude" value="<?php echo $longitude ; ?>">
+		<input type="text" required name="longitude" id="long" value="<?php echo $longitude ; ?>">
 	</div>
+    <div id="Map" style="width:425px;height:220px;"></div>
+
+    <script>
+        var myLat;
+        var myLong;
+        function myGoogleMap() {
+            var mapProp= {
+                center:new google.maps.LatLng(<?php echo $latitude ; ?> ,<?php echo $longitude ; ?>),
+                zoom:13,
+            };
+            var map=new google.maps.Map(document.getElementById("Map"),mapProp);
+
+            google.maps.event.addListener(map, 'click', function(event) {
+                //myLat = event.latLng.lat();
+                //myLong = event.LatLng.lng();
+                //alert(myLat);
+                document.getElementById("lat").value = event.latLng.lat();
+                myLat = document.getElementById("lat").innerHTML;
+                document.getElementById("long").value = event.latLng.lng();
+                myLong = document.getElementById("long").innerHTML;
+            });
+            map.addListener('click', function(e) {
+                //myLong = e.;
+                //alert("ok: " + myLong);
+                placeMarker(e.latLng, map);
+            });
+
+        }
+        var marker;
+        function placeMarker(position, map) {
+            if (marker && marker.setMap) {
+                marker.setMap(null);
+            }
+            marker = new google.maps.Marker({
+                position: position,
+                map: map
+            });
+            map.panTo(position);
+        }
+
+    </script>
 	<div class="input-group">
 
 		<?php if ($update == true): ?>

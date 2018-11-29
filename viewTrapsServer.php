@@ -33,7 +33,7 @@
 		mysqli_query($db, "UPDATE device SET client_id='$client_id', 
 		hardware_id='$hardware_id', 
 		token='$token', 
-		type='$type',
+		trap_group='$type',
 		Upload_Interval='$Upload_Interval',
 		caught='$caught',
 		tempCount='$tempCount',	

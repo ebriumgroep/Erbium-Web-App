@@ -27,10 +27,10 @@
 
 
 	//just need to add the lat and long and hardware id to the location table as well
-	$sql = "INSERT INTO device(client_id, hardware_id, token, type, Upload_Interval, caught, tempCount)
+	$sql = "INSERT INTO device(client_id, hardware_id, token, trap_group, Upload_Interval, caught, tempCount)
 			VALUES ('$active_client', '$active_hardware', $active_token, '$active_type','$active_uploadInterval', 0, 0);
 			INSERT INTO location(device_id,latitude,longitude)
-			VALUES ('$active_hardware','$active_lat','$active_long');";
+			VALUES ((SELECT device_id FROM device where token='$active_hardware'),'$active_lat','$active_long');";
 
 	$fullname = $_SESSION['fullname'];
 

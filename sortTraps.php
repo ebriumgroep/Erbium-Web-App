@@ -6,9 +6,9 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-//session_start();
-//    $active_client = $_SESSION['clientId'];
-$active_client = 21;
+session_start();
+    $active_client = $_SESSION['clientId'];
+//$active_client = 21;
 $sortBy = $_POST['sortBy'];
 
 //TODO
@@ -29,7 +29,7 @@ if($result->num_rows > 0)
         if($row["client_id"] == $active_client)
         {
 //            $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"]);
-            $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"],$row["Battery_Percent"], $row["device_id"]);
+            $result_array[] = array($row["hardware_id"],$row["caught"],$row["trap_group"],$row["Upload_Interval"],$row["Battery_Percent"], $row["device_id"]);
 //$returnedString .=  $row["hardware_id"].' '.$row["type"]."\n";
         }
         $counter = $counter + 1;

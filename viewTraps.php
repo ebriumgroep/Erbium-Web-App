@@ -10,7 +10,7 @@ include('viewTrapsServer.php');
 			$client_id = $n['client_id'];
 			$hardware_id = $n['hardware_id'];
 			$token = $n['token'];
-			$type = $n['type'];
+			$trap_group = $n['trap_group'];
 			$Upload_Interval = $n['Upload_Interval'];
 			$caught = $n['caught'];
 			$tempCount = $n['tempCount'];
@@ -43,11 +43,11 @@ include('viewTrapsServer.php');
                 <a class="nav-link" href="adminOptions.html">Admin</a>
             </li>
         </ul>
-        <div class="dropdown-menu" aria-labelledby="navDropDownLink">
-            <a class="dropdown-item" href="#">Preferences</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Logout</a>
-        </div>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="logout.php" id="Out">Logout</a>
+            </li>
+        </ul>
 
     </div>
 </nav>
@@ -63,6 +63,7 @@ include('viewTrapsServer.php');
 
 <?php $results = mysqli_query($db, "SELECT * FROM device"); ?>
     <h2>Edit trap details below</h2>
+
     <form name="form" action="" method="get">
         Search trap by client ID: <input type="text" name="searchID">
         <button onclick="<?php $temp = $_GET['searchID'];$results = mysqli_query($db, "SELECT * FROM device 
@@ -75,11 +76,11 @@ include('viewTrapsServer.php');
 			<th>ID</th>
 			<th>Client ID</th>
 			<th>Hardware ID</th>
-			<th>token</th>
-			<th>type</th>
+			<th>Token</th>
+			<th>Group</th>
 			<th>Upload_Interval</th>
 			<th>Moths Caught</th>
-			<th>temperature count</th>
+			<th>Temperature count</th>
 			<th>Battery %</th>
 			<th colspan="2">Action</th>
 		</tr>
@@ -91,7 +92,7 @@ include('viewTrapsServer.php');
 			<td><?php echo $row['client_id']; ?></td>
 			<td><?php echo $row['hardware_id']; ?></td>
 			<td><?php echo $row['token']; ?></td>
-			<td><?php echo $row['type']; ?></td>
+			<td><?php echo $row['trap_group']; ?></td>
 			<td><?php echo $row['Upload_Interval']; ?></td>
 			<td><?php echo $row['caught']; ?></td>
 			<td><?php echo $row['tempCount']; ?></td>
@@ -125,8 +126,8 @@ include('viewTrapsServer.php');
 		<input type="text"  required name="token" value="<?php echo $token ; ?>">
 	</div>
 	<div class="input-group">
-		<label>Type</label>
-		<input type="text" required  name="type" value="<?php echo $type ; ?>">
+		<label>Group</label>
+		<input type="text" required  name="type" value="<?php echo $trap_group ; ?>">
 	</div>
 	<div class="input-group">
 		<label>Upload_Interval</label>

@@ -19,7 +19,7 @@
 	{
         $result_array = array();
 		while ($row = $result->fetch_assoc()) {
-            $result_array[] = array($row["hardware_id"],$row["caught"],$row["type"],$row["Upload_Interval"],$row["Battery_Percent"], $row["device_id"]);
+            $result_array[] = array($row["hardware_id"],$row["caught"],$row["trap_group"],$row["Upload_Interval"],$row["Battery_Percent"], $row["device_id"]);
             //$returnedString .=  $row["hardware_id"].' '.$row["type"]."\n";
             $counter = $counter + 1;
 		}

@@ -20,7 +20,7 @@ $active_uploadInterval = $_POST['upload_interval'];
 
 $sql = "UPDATE device
         SET hardware_id = '$active_hardware',
-            type = '$active_type',
+            trap_group = '$active_type',
             Upload_Interval = '$active_uploadInterval'
         WHERE hardware_id = '$deviceID';";
 

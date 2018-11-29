@@ -68,6 +68,12 @@
 			function init(){
 			    myGoogleMap();
 			}
+			function addcliententer(e, textarea){
+                var code = (e.keyCode ? e.keyCode : e.which);
+                if(code == 13) { //Enter keycode
+                    document.getElementById("addClientButton").click();
+                }
+            }
 			</script>
 	</head>
 	<body>
@@ -86,11 +92,11 @@
                     <a class="nav-link" href="viewClients.php">Admin</a>
                 </li>
             </ul>
-            <div class="dropdown-menu" aria-labelledby="navDropDownLink">
-                <a class="dropdown-item" href="#">Preferences</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Logout</a>
-            </div>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php" id="Out">Logout</a>
+                </li>
+            </ul>
 
         </div>
     </nav>
@@ -98,7 +104,7 @@
 		<div id="addClient" style="border:3px solid black;color:white; width: 700px; margin: 0 auto; background-color:rgba(0, 0, 0, 0.5);padding:20px;">
 			<h2 style="text-align:center;">Add client details below</h2>
 			<div id="addClientForm" style="margin:auto;">
-				<form method= "POST" onsubmit="return false" id="clientForm" action="addClient.php">
+				<form method= "POST" onsubmit="return false" id="clientForm" action="addClient.php"onKeyPress="addcliententer(event, this)">
 					<input type="text" placeholder="FullName" name="fullname" id="fn"><br><br>
 					<input type="text" placeholder="Username" name="username" id="un"><br><br>
 					<input type="password" placeholder="Password" name="password" id="pw1"><br><br>
@@ -149,7 +155,7 @@
 
 					<label>Lat: </label><input type="text" id="lblLat2" name="clientLat">
 					<label>Long: </label><input type="text" id="lblLong2" name="clientLong"><br>
-					<button onclick="validateAddClient()">Add Client</button>
+					<button onclick="validateAddClient()" id="addClientButton">Add Client</button>
 				</form>
 			</div>
 	
