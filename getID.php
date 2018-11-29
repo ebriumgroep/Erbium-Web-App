@@ -23,9 +23,9 @@ $size = $result->num_rows;
 if($size > 0){
     $row = $result->fetch_assoc();
     $conn->close();
-    echo $row["device_id"];;
+    echo '{'.$row["device_id"].'}';
 }
 else{
     $conn->close();
-    echo '-1';
+    echo '{FAILURE}';
 }

@@ -1,6 +1,6 @@
 <?php 
 	session_start();
-	$db = mysqli_connect('localhost', 'root', '', 'id7227985_erbium');
+	$db = mysqli_connect('localhost', 'id7227985_root', 'erbium', 'id7227985_erbium');
 
 	// initialize variables
 	$client_id = 0;
