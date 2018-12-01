@@ -650,6 +650,8 @@
                 var tempA = [];
                 tempA = trapArr;
                 var tempArr=[];
+                var individualTraps = [];
+                var filteredTraps = [];
                 for(i=0;i<trapArrSortByCaught.length;i++){
                     tempArr.push(trapArrSortByCaught[i][2]);
                 }
@@ -661,7 +663,7 @@
                 OptionClicked = sel.options[sel.selectedIndex].text;
                 //alert(OptionClicked);
                 var eSelect = document.getElementById('sortDropdown');
-                for(i=0;i<uniqueGroupsForClient.length;i++){
+                /*for(i=0;i<uniqueGroupsForClient.length;i++){
                     if(OptionClicked === uniqueGroupsForClient[i]){
                         for(j=0;j<tempA.length;j++){
                             if(tempA[j][2] !== OptionClicked){
@@ -670,8 +672,27 @@
                             }
                         }
                     }
+				}*/
+                if(sel.selectedIndex !== 0 && sel.selectedIndex !== 1 && sel.selectedIndex !== 2 && sel.selectedIndex !== 3){
+                    for(var i = 0; i < tempA.length; i++) {
+                        if(tempA[i][2] == OptionClicked){
+                            //individualTraps.push(tempA[i]);
+							string = tempA[i][0] + "," +tempA[i][1] + "," +tempA[i][2] + "," +tempA[i][3] + "," +
+                                tempA[i][4] + "," +tempA[i][5] + "," +tempA[i][6] + "," +tempA[i][7] + "," +
+                                tempA[i][8] + "," +tempA[i][9] + "," +tempA[i][10] + "," +tempA[i][11];
+                            filteredTraps[filteredTraps.length] = new Array(tempA[i]);
+
+                        }
+                    }
+                    //filteredTraps.push(individualTraps);
+                    //console.log(tempA);
+                    console.log(filteredTraps[1][1]);
+                    var maintrapdiv = document.getElementById("trapsDisplay");
+                    maintrapdiv.innerHTML = '';//delete child elements on div
+                    numOfTraps = 0;
+                    //displayNumOfTraps(filteredTraps);
 				}
-                console.log(tempA);
+
             }
         var t;
         $.get("getTraps.php", function(data, status){

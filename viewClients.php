@@ -3,7 +3,7 @@ include('viewClientsServer.php');
 	if (isset($_GET['edit'])) {
 		$client_id = $_GET['edit'];
 		$update = true;
-		$record = mysqli_query($db, "SELECT client_id, full_name, username, latitude, longitude FROM client WHERE client_id=$client_id");
+		$record = mysqli_query($db, "SELECT client_id, full_name, username, latitude, longitude,Admin FROM client WHERE client_id=$client_id");
 
 		if (@count($record) == 1 ) {
 			$n = mysqli_fetch_array($record);
@@ -11,6 +11,7 @@ include('viewClientsServer.php');
 			$username = $n['username'];
 			$latitude = $n['latitude'];
 			$longitude = $n['longitude'];
+			$admin= $n['Admin'];
 		}
 
 	}
@@ -58,13 +59,13 @@ include('viewClientsServer.php');
 		</div>
 	<?php endif ?>
 
-<?php $results = mysqli_query($db, "SELECT client_id, full_name, username, latitude, longitude FROM client"); ?>
+<?php $results = mysqli_query($db, "SELECT client_id, full_name, username, latitude, longitude, Admin FROM client"); ?>
 <h2>Edit client details below</h2>
 <button class="buttons" onclick="window.location.href='settings.html'">Add Client</button>
 <form name="form" action="" method="get">
     Search client by name: <input type="text" name="searchName">
     <button onclick=" <?php $temp ="";$temp = $_GET['searchName'];
-    $results = mysqli_query($db, "SELECT client_id, full_name, username, latitude, longitude
+    $results = mysqli_query($db, "SELECT client_id, full_name, username, latitude, longitude, Admin
  FROM client where full_name LIKE '%$temp%'"); ?> ">GO</button>
 </form>
 <div id="mainDivEdit">
@@ -76,6 +77,7 @@ include('viewClientsServer.php');
 			<th>Email</th>
 			<th>Latitude</th>
 			<th>Longitude</th>
+            <th>Admin</th>
 			<th colspan="2">Action</th>
 		</tr>
 	</thead>
@@ -87,6 +89,7 @@ include('viewClientsServer.php');
 			<td><?php echo $row['username']; ?></td>
 			<td><?php echo $row['latitude']; ?></td>
 			<td><?php echo $row['longitude']; ?></td>
+            <td><?php echo $row['Admin']; ?></td>
 			<td>
 				<a href="viewClients.php?edit=<?php echo $row['client_id']; ?>" class="edit_btn" >Edit</a>
 			</td>
@@ -116,9 +119,13 @@ include('viewClientsServer.php');
 		<input type="text" required name="latitude" id="lat" value="<?php echo $latitude ; ?>">
 	</div>
 	<div class="input-group">
-		<label>Longitude</label>
-		<input type="text" required name="longitude" id="long" value="<?php echo $longitude ; ?>">
-	</div>
+        <label>Longitude</label>
+        <input type="text" required name="longitude" id="long" value="<?php echo $longitude ; ?>">
+    </div>
+    <div class="input-group">
+        <label>Admin</label>
+        <input type="number" maxlength="1" required name="admin" id="admin" value="<?php echo $admin ; ?>">
+    </div>
     <div id="Map" style="width:425px;height:220px;"></div>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
     <script>

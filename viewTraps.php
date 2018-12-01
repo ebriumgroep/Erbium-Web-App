@@ -19,7 +19,7 @@ include('viewTrapsServer.php');
 
 	}
 ?>
-<?php $results = mysqli_query($db, "SELECT * FROM device"); ?>
+<?php $results = mysqli_query($db, "SELECT device.*,client.full_name AS fullname FROM device JOIN client ON client.client_id = device.client_id"); ?>
 <!DOCTYPE html>
 <html>
 <head>
