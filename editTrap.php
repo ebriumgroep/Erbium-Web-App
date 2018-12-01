@@ -14,15 +14,19 @@ if ($conn->connect_error) {
 }
 
 $deviceID = $_POST["device_id"];
-$active_hardware = $_POST["hardware"];
+$active_hardware = $_POST["description"];
 $active_type = $_POST['type'];
 $active_uploadInterval = $_POST['upload_interval'];
+$active_latitude = $_POST["editTrapLat"];
+$active_longitude = $_POST["editTrapLong"];
 
 $sql = "UPDATE device
-        SET hardware_id = '$active_hardware',
+        SET description = '$active_hardware',
             trap_group = '$active_type',
-            Upload_Interval = '$active_uploadInterval'
-        WHERE hardware_id = '$deviceID';";
+            Upload_Interval = '$active_uploadInterval',
+            latitude = '$active_latitude',
+            longitude = '$active_longitude'
+        WHERE token = '$deviceID';";
 
 if($conn->query($sql) === true){
     $conn->close();

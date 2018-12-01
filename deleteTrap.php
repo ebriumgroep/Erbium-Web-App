@@ -13,8 +13,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$hardwareID = $_GET["hardwareId"];
-$sql = "DELETE FROM device WHERE hardware_id='$hardwareID'";
+$hardwareID = $_GET["token"];
+$sql = "DELETE FROM device WHERE token='$hardwareID'";
 $result = $conn->query($sql);
 
 echo $result;

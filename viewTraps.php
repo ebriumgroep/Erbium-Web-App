@@ -8,8 +8,8 @@ include('viewTrapsServer.php');
 		if (@count($record) == 1 ) {
 			$n = mysqli_fetch_array($record);
 			$client_id = $n['client_id'];
-			$hardware_id = $n['hardware_id'];
 			$token = $n['token'];
+			$description = $n['description'];
 			$trap_group = $n['trap_group'];
 			$Upload_Interval = $n['Upload_Interval'];
 			$caught = $n['caught'];
@@ -75,8 +75,8 @@ include('viewTrapsServer.php');
 		<tr>
 			<th>ID</th>
 			<th>Client ID</th>
-			<th>Hardware ID</th>
 			<th>Token</th>
+			<th>Description</th>
 			<th>Group</th>
 			<th>Upload_Interval</th>
 			<th>Moths Caught</th>
@@ -90,8 +90,8 @@ include('viewTrapsServer.php');
 		<tr>
 			<td><?php echo $row['device_id']; ?></td>
 			<td><?php echo $row['client_id']; ?></td>
-			<td><?php echo $row['hardware_id']; ?></td>
 			<td><?php echo $row['token']; ?></td>
+			<td><?php echo $row['description']; ?></td>
 			<td><?php echo $row['trap_group']; ?></td>
 			<td><?php echo $row['Upload_Interval']; ?></td>
 			<td><?php echo $row['caught']; ?></td>
@@ -118,12 +118,12 @@ include('viewTrapsServer.php');
 		<input type="text" required name="client_id" value="<?php echo $client_id; ?>">
 	</div>
 	<div class="input-group">
-		<label>Hardware ID</label>
-		<input type="text"  required name="hardware_id" value="<?php echo $hardware_id ; ?>">
-	</div>
-	<div class="input-group">
 		<label>Token</label>
 		<input type="text"  required name="token" value="<?php echo $token ; ?>">
+	</div>
+	<div class="input-group">
+		<label>Description</label>
+		<input type="text"  required name="description" value="<?php echo $description ; ?>">
 	</div>
 	<div class="input-group">
 		<label>Group</label>

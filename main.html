@@ -95,7 +95,7 @@
 		var arrayForTemp=[];
         var temp;
         let humid;
-        function storeTempHumid(id){
+        /*function storeTempHumid(id){
             var t,h;
             $.when(
                 $.ajax({ // First Request
@@ -127,13 +127,13 @@
         }
         function setTempHumid(id,t,h){
             temp = t;
-			/*var testArrayT = [];
+			/!*var testArrayT = [];
 			testArrayT.push(id,t);
             var testArrayH = [];
             testArrayH.push(id,t);
 			//console.log(testArrayT);
 			arrayForTemp.push(testArrayT);
-            arrayForHumid.push(testArrayH);*/
+            arrayForHumid.push(testArrayH);*!/
             arrayForTemp.push(id,t);
             arrayForHumid.push(id,h);
             //console.log(temp);
@@ -142,77 +142,94 @@
         function getHumidFromArray(id){
             var value = arrayForHumid.indexOf(id);
             return arrayForHumid[value+1];
-		}
-            function displayNumOfTraps(array)
-            {
-                console.log(arrayForHumid);
-                trapArrSortByCaught = array;
-                // var trapArr = <?php echo $json_array; ?>;
-                for(i=0;i<array.length;i++)
-                                {
-                                    let id = array[i][5];
-									let hid = array[i][0];
-                                    let c = array[i][1];
-                                    let t = array[i][2];
-                                    let u = array[i][3];
-                                    let b = array[i][4];
+		}*/
+        function getHumid(id){//,callback){
+            var element = 0;
+            $.ajax({
+                type: 'post',
+                url: 'getHumidAverage.php',
+                async:false,
+                data: "device_id="+ id,
+                dataType: 'json',
+                success: function(response) {
+                    /*var content = response;
+                    element = content;
 
-                                    console.log(id,hid,c,t,u,b);
-									/*getHumid(id, function(someElement1){
-									    //alert(someElement);
-										tempHumid = someElement1;
-
-                                        getTemp(id, function(someElement){
-                                            //alert(someElement);
-                                            tempTemp = someElement;
-
-                                            addTrapDiv(hid, c, t, u,b,someElement1,someElement);
-                                            console.log(hid, c, t, u,b,someElement1,someElement);
-                                        });
-                                    });*/
-									//getHumid(id);
-									//getTemp(id);
-									/*for(k=0;k<arrayForHumid.length;k++){
-									    if(arrayForHumid[k][0] == id){
-									        humid = arrayForHumid[k][1];
-										}
-									}
-                                    for(k=0;k<arrayForTemp.length;k++){
-                                        if(arrayForTemp[k][0] == id){
-                                            humid = arrayForTemp[k][1];
-                                        }
-                                    }
-                                    type: 'post',
+                    callback(element);*/
+                    //AjaxCallBackHumid(response);
+                    //alert(tempHumid);
+                    arrayForHumid.push(id,response);
+                    console.log(arrayForHumid);
+                }
+            });
+        }
+        function getTemp(id){
+            var element = 0;
+            $.ajax({
+                type: 'post',
                 url: 'getTempAverage.php',
                 async:false,
                 data: "device_id="+ id,
                 dataType: 'json',
-                                    */
-                                    //if successful
-									storeTempHumid(id);
-									//console.log(arrayForTemp);
-                                    /*for(k=0;k<=arrayForTemp.length;k++){
-                                        console.log(arrayForTemp);
-										for(l=0;l<=arrayForTemp[k].length;l++){
-                                            if(arrayForTemp[k][0] == id){
-                                                alert(arrayForTemp[k][1]);
-											}
-                                        }
-                                    }*/
-                                    //console.log(arrayForHumid);
-									//console.log(getHumidFromArray(21));
-                                    addTrapDiv(hid, c, t, u,b,0,0);
-                                    //console.log(hid, c, t, u,b,humid,temp);
-									clientDeviceIdArray.push(id);
-									//allTrapLocations.push();
-									numOfTraps++;
-                                    //addTrapDiv(trapArr[i][0], trapArr[i][1], trapArr[i][2], trapArr[i][3],trapArr[i][4],tempHumid,tempTemp);
-                                }
+                success: function(response) {
+                    /*var content = response;
+                    element = content;
+
+                    callback(element);*/
+                    //AjaxCallBackHumid(response);
+                    //alert(tempHumid);
+                    arrayForTemp.push(id,response);
+                }
+            });
+        }
+            function displayNumOfTraps(array)
+            {
+                console.log(arrayForHumid);
+                trapArrSortByCaught = array;
+                for(i=0;i<array.length;i++)
+                                {
+                                    var temp,humid;
+                                    var xhr = new XMLHttpRequest();
+                                    xhr.open('POST', 'getTempAverage.php', false);
+                                    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                                    xhr.onload = function () {
+                                        // do something to response
+                                        console.log(this.responseText);
+                                        temp = this.responseText;
+                                    };
+                                    xhr.send('device_id=' + array[i][5]);
+                                    var xhr2 = new XMLHttpRequest();
+                                    xhr2.open('POST', 'getHumidAverage.php', false);
+                                    xhr2.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                                    xhr2.onload = function () {
+                                        // do something to response
+                                        console.log(this.responseText);
+                                        humid = this.responseText;
+                                    };
+                                    xhr2.send('device_id=' + array[i][5]);
+                                    let id = array[i][5];
+                                    let hid = array[i][0];
+                                    let c = array[i][1];
+                                    let t = array[i][2];
+                                    let u = array[i][3];
+                                    let b = array[i][4];
+                                    let lat = array[i][6];
+                                    let long = array[i][7];
+                                    let descrip = array[i][8];
+                                    let signal = array[i][9];
+                                    let lastUp = array[i][10];
+                                    let dataAv = array[i][11];
+                                    let avrTemp = temp;
+                                    let avrHum = humid;
+                                    addTrapDiv(hid, c, t, u,b,avrHum,avrTemp,id,lat,long,descrip,signal,lastUp,dataAv);
+                                    clientDeviceIdArray.push(id);
+                                    numOfTraps++;
+                                    }
                 document.getElementById("trapNo").innerHTML = "The number of traps atm is: " + numOfTraps;
             }
 
 		    var no=0;
-            function addTrapDiv(tempName,token,type,upload,battery,averageHumid,averageTemp)
+            function addTrapDiv(tempName,caught,type,upload,battery,averageHumid,averageTemp,id,latitude,longitude,description,sig,lastU,dataA)
             {
                   no++;
                 //alert(averageHumid);
@@ -222,6 +239,12 @@
                 var bat_perc = battery;
                 var tempHumid = averageHumid;
                 var tempTemp = averageTemp;
+                var lat = latitude;
+                var long = longitude;
+                var desc = description;
+                var signal = sig;
+                var last_updated = lastU;
+                var data_available = dataA;
                 // numOfTraps++;
                 //var tempName = prompt("Please enter a temp name for testing","");
                 var iDiv = document.createElement('div');
@@ -229,21 +252,39 @@
                     iDiv.className = "trap";
                     iDiv.name = no;
                     iDiv.onclick = function(){
-                        document.getElementById("editHardwareID").value = name;
+                        document.getElementById("editDescription").value = description;
                         document.getElementById("upload_interval").value = UploadInt;
                         document.getElementById("editType").value = TrapType;
                         document.getElementById("Tid").value = name;
+                        document.getElementById("lblLat").value = lat;
+                        document.getElementById("lblLong").value = long;
+                        document.getElementById("showToken").value = name;
+                        document.getElementById("showDescription").value = description;
+                        document.getElementById("showTrapGroup").value= TrapType;
+                        document.getElementById("showUpload").value = UploadInt;
+                        document.getElementById("showCaught").value = caught;
+                        document.getElementById("showBattery").value = bat_perc;
+                        document.getElementById("showSignal").value = signal;
+                        document.getElementById("showLastUpdate").value = last_updated;
+                        document.getElementById("showData").value = data_available;
+                        document.getElementById("showLat").value = lat;
+                        document.getElementById("showLong").value = long;
+                        showTrapMap(name,lat,long);
                     }
-
                 var clickMe = document.createElement("button");
                     clickMe.innerHTML = "";
                     clickMe.id = "editTButton";
+				var showMore = document.createElement("button");
+					showMore.innerHTML = "More";
+					showMore.id = "showMoreButton";
+					showMore.style.position = "relative";
+					showMore.style.top = "0";
                 var deleteTrap = document.createElement("button");
                 deleteTrap.innerHTML = "Delete";
                 deleteTrap.id = "deleteTrap";
                 deleteTrap.onclick = function() {
 
-                    $.get("deleteTrap.php", {hardwareId:tempName}, function(data, status){
+                    $.get("deleteTrap.php", {token:tempName}, function(data, status){
                         console.log("Removed:"+status);
                         // if(data !== ""){
                         alert(data);
@@ -287,16 +328,17 @@
 					humidText.style.outline = "none";
 					humidText.style.border = "none";
                 var tokenText = document.createElement("header");
-					tokenText.innerHTML = "Caught: " + token;
+					tokenText.innerHTML = "Caught: " + caught;
 					tokenText.style.fontSize = "30px";
 
 
                 var iHeader = document.createElement('header');
-                iHeader.innerHTML = "Hardware ID: " + tempName;
+                iHeader.innerHTML = "Desc: " + description;
 
                 iDiv.appendChild(iHeader);
                 iDiv.appendChild(clickMe);
                 iDiv.appendChild(deleteTrap);
+                iDiv.appendChild(showMore);
                 iDiv.appendChild(tokenText);
                 iDiv.appendChild(tempLbl);
                 iDiv.appendChild(tempText);
@@ -371,6 +413,12 @@
 
 			});
 			$(document).ready(function(){
+				$(document).on('click', "#showMoreButton", function() {
+					$("#showMoreModal").modal('show');
+				});
+
+			});
+			$(document).ready(function(){
 				$(document).on('click', "#mapofTrapsClient", function() {
 					$("#allTrapsMapModal").modal('show');
 				});
@@ -404,10 +452,9 @@
                     console.log("Data: " + data + "\nStatus: " + status);
                     if(status === "success"){
                         chartData1 = JSON.parse(data);
-                        chartData2 = JSON.parse(data);
                         var chartProperties1 = {
                             "caption": "Number of moths caught in traps",
-                            "xAxisName": "Hardware ID",
+                            "xAxisName": "Token",
                             "yAxisName": "Caught",
                             "rotatevalues": "1",
                             "theme": "zune"
@@ -423,26 +470,7 @@
                                 "data": chartData1
                             }
                         });
-                        var chartProperties2 = {
-                            "caption": "Number of moths caught in traps",
-                            "xAxisName": "Hardware ID",
-                            "yAxisName": "Caught",
-                            "rotatevalues": "1",
-                            "theme": "zune"
-                        };
-                        Chart2 = new FusionCharts({
-                            type: 'pie2d',
-                            renderAt: 'MothsCaughtPie',
-                            width: '550',
-                            height: '350',
-                            dataFormat: 'json',
-                            dataSource: {
-                                "chart": chartProperties2,
-                                "data": chartData2
-                            }
-                        });
                         Chart1.render();
-                        Chart2.render();
                     }
                 });
                 for(i=0;i<=clientDeviceIdArray.length;i++){
@@ -456,30 +484,81 @@
                             var content = response;
                             element = content;
 
-                            callback(element);
-                            chartData1 = content;
-                            var chartProperties1 = {
+                            //callback(element);
+                            chartData2 = content;
+                            var chartProperties2 = {
                                 "caption": "Average Temp per trap",
-                                "xAxisName": "Hardware ID",
+                                "xAxisName": "Trap Token",
                                 "yAxisName": "Avg Temp",
                                 "rotatevalues": "1",
                                 "theme": "zune"
                             };
-                            Chart1 = new FusionCharts({
+                            Chart2 = new FusionCharts({
                                 type: 'column2d',
                                 renderAt: 'averageTempColumn',
                                 width: '550',
                                 height: '350',
                                 dataFormat: 'json',
                                 dataSource: {
-                                    "chart": chartProperties1,
-                                    "data": chartData1
+                                    "chart": chartProperties2,
+                                    "data": chartData2
                                 }
                             });
-                            Chart1.render();
+                            Chart2.render();
                         }
                 });
 				}
+                for(i=0;i<=clientDeviceIdArray.length;i++){
+                    /*var element = 0;
+                    $.ajax({
+                        type: 'post',
+                        url: 'getGraphInfoTrapCount.php',
+                        data: "device_id="+ clientDeviceIdArray[i],
+                        dataType: 'json',
+                        success: function(response) {
+                            var content = response;
+                            element = content;
+                            //MAKE GRAPH HERE AS SOON AS BACKEND IS DONE!!!!
+                        }
+                    });*/
+                    chartData3 = [
+						{
+						    "label": "30-11-2018 00:00:00",
+							"value": "0"
+						},
+						{
+                            "label": "30-11-2018 08:12:56",
+                            "value": "1"
+						},
+						{
+                            "label": "30-11-2018 13:12:22",
+                            "value": "2"
+						},
+						{
+                            "label": "30-11-2018 16:02:00",
+                            "value": "3"
+						},
+					]
+                    var chartProperties3 = {
+                        "caption": "Caught today",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Cumulatively caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'lineperday',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": chartData3
+                        }
+                    });
+                    Chart3.render();
+                }
 
 			}
 			function setSortDropDown(){
@@ -491,17 +570,59 @@
 				}
                 var eSelect = document.getElementById('sortDropdown');
                 var maintrapdiv = document.getElementById("trapsDisplay");
+                var tempArr=[];
+                for(i=0;i<trapArrSortByCaught.length;i++){
+                    tempArr.push(trapArrSortByCaught[i][2]);
+				}
+                var uniqueGroupsSet = new Set(tempArr);
+                var uniqueGroupsForClient = Array.from(uniqueGroupsSet);
+                var select = document.getElementById("sortDropdown");
+                for(j=0;j<uniqueGroupsForClient.length;j++){
+					var newSelect = document.createElement('option');
+					newSelect.innerHTML = uniqueGroupsForClient[j];
+                    newSelect.value = uniqueGroupsForClient[j];
+                    select.appendChild(newSelect);
+				}
+                var text = eSelect.options[eSelect.selectedIndex].text;
+                var tempA = [];
+                tempA = trapArr;
                 eSelect.onchange = function() {
                     if(eSelect.selectedIndex === 1) {
                         trapArrSortByCaught.sort(function(a, b) {
                             return b[1] - a[1];
                         });
                         maintrapdiv.innerHTML = '';//delete child elements on div
+						numOfTraps = 0;
                         displayNumOfTraps(trapArrSortByCaught);
                     } else if(eSelect.selectedIndex === 2){
 						//battery?
+                        trapArrSortByCaught.sort(function(a, b) {
+                            return b[4] - a[4];
+                        });
+                        maintrapdiv.innerHTML = '';//delete child elements on div
+                        numOfTraps = 0;
+                        displayNumOfTraps(trapArrSortByCaught);
                     }
+                    else if(eSelect.selectedIndex === 3){
+                        console.log(uniqueGroupsForClient);
+					}
+					else{
+                        //alert(document.getElementById("sortDropdown").value);
+
+					       // if(eSelect.selectedIndex === text){
+						/*for(i=0;i<uniqueGroupsForClient.length;i++){
+					            for(j=0;j<tempA.length;j++){
+					                if(tempA[j][2] !== document.getElementById("sortDropdown").value){
+					                    tempA.splice(j,1);
+									}
+								}
+						}
+						console.log(tempA);*/
+					}
                 }
+			}
+			function newDropDowns(){
+
 			}
         function allTraps() {
             // myMap();
@@ -512,7 +633,7 @@
                 ['trap2','-25.767166630316538','28.213600862304702'],
                 ['trap3','-25.75510778350059','28.25282548693849']
             ];//to hold trap locations for user
-            //alert(myLong);
+            //alert(userObject.latitude);
             var map = new google.maps.Map(document.getElementById('allTrapsGoogleMap'), {
                 zoom: 13,
                 center: new google.maps.LatLng(userObject.latitude,userObject.longitude),
@@ -537,47 +658,9 @@
                 })(marker, i));
             }
         }
-        tinysort('#trapsDisplay > div',{attr: 'name'});
+        //tinysort('#trapsDisplay > div',{attr: 'name'});
             //-----------------------------------------------------------------
-        function getHumid(id){//,callback){
-            var element = 0;
-            $.ajax({
-                type: 'post',
-                url: 'getHumidAverage.php',
-                async:false,
-                data: "device_id="+ id,
-                dataType: 'json',
-                success: function(response) {
-                    /*var content = response;
-                    element = content;
 
-                    callback(element);*/
-                    //AjaxCallBackHumid(response);
-                    //alert(tempHumid);
-                    arrayForHumid.push(id,response);
-                    console.log(arrayForHumid);
-                }
-            });
-        }
-        function getTemp(id){
-            var element = 0;
-            $.ajax({
-                type: 'post',
-                url: 'getTempAverage.php',
-                async:false,
-                data: "device_id="+ id,
-                dataType: 'json',
-                success: function(response) {
-                    /*var content = response;
-                    element = content;
-
-                    callback(element);*/
-                    //AjaxCallBackHumid(response);
-                    //alert(tempHumid);
-                    arrayForTemp.push(id,response);
-                }
-            });
-        }
         </script>
     </head>
 
@@ -614,7 +697,7 @@
 		</div>
 
 		<div id="Admin" class="tabcontent" style="background-color:rgba(0,0,0,0.5);height:1000px;color:white;">
-			<h2 style="text-align:center;">Watch this space</h2>
+			<h2 style="text-align:center;">User settings and preferences</h2>
 		</div>
 
 		</div>
@@ -626,12 +709,9 @@
         <select style="float:right;" id="sortDropdown">
 			<option selected disabled>Sort Traps By  (choose option)</option>
 			<option value="numOfMoths">Number of moths</option>
-			<option value="Temp">Temprature</option>
-			<option value="GroupMac">Group Macadamia</option>
-			<option value="GroupOrch">Group Orchard</option>
-            <option value="Add another group">Add another group</option>
+			<option value="Battery">Battery %</option>
+			<option value="Temp">Temp</option>
         </select><br><br>
-			<button onclick="sort()">SORT ME</button>
 		<button id="mapofTrapsClient">Map of all traps</button>
 			<div id="allTrapsMapModal" class="modal fade">
 				<div class="modal-dialog">
@@ -662,7 +742,7 @@
 						<div class="modal-body">
 							<form method="POST" action="addTrap.php" id="trapForm" onKeyPress="enterAddTrap(event, this)">
 								Trap Group: <input type="text" required id="addTraptype" name="type"><br>
-								Hardware ID: <input type="text" required  id="addTraphardware" name="hardware"><br>
+								Token: <input type="text" required  id="addTraphardware" name="token"><br>
 								Upload Interval: <!--<input type="text" id="editUpload"><br>-->
 								<select id="Trap_upload_interval"  required name="upload_interval">
 									<option value="Everyhour">Every hour</option>
@@ -704,7 +784,7 @@
 						<form method="POST" action="editTrap.php" id="trapEditForm" onKeyPress="enterEditTrap(event, this)">
 						<input type="text" hidden id="Tid" name="device_id">
 						Trap Group: <input type="text"  required id="editType" name="type"><br>
-						Hardware ID: <input type="text"  required id="editHardwareID" name="hardware"><br>
+						Description: <input type="text"  required id="editDescription" name="description" maxlength="12"><br>
 						Upload Interval: <!--<input type="text" id="editUpload"><br>-->
 						<select id="upload_interval" name="upload_interval">
 								<option value="Everyhour">Every hour</option>
@@ -738,6 +818,34 @@
 				</div>
 			</div>
 		</div>
+			<div id="showMoreModal" class="modal fade">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Additional Information</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						</div>
+						<div class="modal-body">
+							Token: <input type="text" disabled id="showToken" ><br>
+							Description: <input type="text" disabled id="showDescription"><br>
+							Trap Group: <input type="text" disabled id="showTrapGroup"><br>
+							Upload Interval: <input type="text" disabled id="showUpload"><br>
+							Caught: <input type="text" disabled id="showCaught"><br>
+							Battery Percentage: <input type="text" disabled id="showBattery"><br>
+							Signal Strength: <input type="text" disabled id="showSignal"><br>
+							Last Updated: <input type="text" disabled id="showLastUpdate"><label id="lastUpdateError" style="color:red"></label><br>
+							Available Data: <input type="text" disabled id="showData"><br>
+							lat: <input type="text" disabled id="showLat"><br>
+							Long: <input type="text" disabled id="showLong">
+							<div id="showTrapLocationMap" style="width:425px;height:220px;"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+						</div>
+					</div>
+				</div>
+			</div>
 
 			<div id="trapsDisplay"> <!-- traps will be displayed in here -->
 
@@ -745,9 +853,8 @@
 		</div>
 		<div id="Graphs" class="tabcontent">
 			<div id="MothsCaughtColumn">FusionCharts will render here</div>
-			<div id="MothsCaughtPie">FusionCharts will render here</div>
 			<div id="averageTempColumn">FusionCharts will render here</div>
-			<div id="">FusionCharts will render here</div>
+			<div id="lineperday">FusionCharts will render here</div>
 			<div id="">FusionCharts will render here</div>
 		</div>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
@@ -756,7 +863,42 @@
 				tinysort('#trapsDisplay > div',{attr: 'name'});
 
 			}
+		function showTrapMap(name,lat,long){
+			    console.log(lat);
+            if (typeof lat === 'undefined') {
+                // the variable is defined
+            }
+				else {
+                    var allTrapLocations = [
+                        [name,lat,long]
+                    ];//to hold trap locations for user
+                    //alert(userObject.latitude);
+                    var map = new google.maps.Map(document.getElementById('showTrapLocationMap'), {
+                        zoom: 13,
+                        center: new google.maps.LatLng(lat,long),
+                        mapTypeId: google.maps.MapTypeId.SATELLITE
+                    });
 
+                    var infowindow = new google.maps.InfoWindow();
+
+                    var marker, i;
+
+                    for (i = 0; i < allTrapLocations.length; i++) {
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng(allTrapLocations[i][1], allTrapLocations[i][2]),
+                            map: map
+                        });
+
+                        google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                            return function () {
+                                infowindow.setContent(allTrapLocations[i][0]);
+                                infowindow.open(map, marker);
+                            }
+                        })(marker, i));
+                    }
+				}
+
+		}
         //initiate the google maps in the add trap and edit trap divs - so that you can display 2 on 1 html page
         function init(){
             myMap();

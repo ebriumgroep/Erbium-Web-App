@@ -22,7 +22,6 @@ include('viewClientsServer.php');
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
     <script src="jquery-3.2.1.js"></script>
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
 
 </head>
 <body>
@@ -74,7 +73,7 @@ include('viewClientsServer.php');
 		<tr>
 			<th>ID</th>
 			<th>Full name</th>
-			<th>Username</th>
+			<th>Email</th>
 			<th>Latitude</th>
 			<th>Longitude</th>
 			<th colspan="2">Action</th>
@@ -109,8 +108,8 @@ include('viewClientsServer.php');
 		<input type="text" required name="full_name" value="<?php echo $full_name; ?>">
 	</div>
 	<div class="input-group">
-		<label>Username</label>
-		<input type="text" required name="username" value="<?php echo $username ; ?>">
+		<label>Email</label>
+		<input type="email" required name="username" value="<?php echo $username ; ?>">
 	</div>
 	<div class="input-group">
 		<label>Latitude</label>
@@ -121,7 +120,7 @@ include('viewClientsServer.php');
 		<input type="text" required name="longitude" id="long" value="<?php echo $longitude ; ?>">
 	</div>
     <div id="Map" style="width:425px;height:220px;"></div>
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
     <script>
         var myLat;
         var myLong;

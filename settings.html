@@ -4,79 +4,9 @@
 <title>Settings</title>
 <link rel="stylesheet" type="text/css" href="settings.css">
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
-    <script src="jquery-3.2.1.js"></script>
-    <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
-    <script src="modalJS.js"></script>
-		<script>
-		var clientArr;
-            $(document).ready(function(){
-			
-                $.get("getClients.php", function(dat, status){
-                    console.log("Data: " + dat + "\nStatus: " + status);
-                    if(status == "success"){
-						clientArr = JSON.parse(dat);
-						makeTable();
-                    }
-                });
 
-                /*$('#logout').click(function(){
-
-                });*/
-            });
-			var id;
-			function makeTable(){
-				var table = document.getElementById("myTable");//document.createElement("table");
-				for(var i =0;i<clientArr.length;i++){
-					var row = document.createElement("tr");
-					var currentRow = table.rows[i];
-					var createClickHandler = function(row){
-						return function(){
-							var cell = row.getElementsByTagName("td")[0];
-							id = cell.innerHTML;
-							//alert("id: " + id);
-							document.getElementById("clientDeleteId").value = id;
-						}
-					}
-					
-					for(var j=0;j<clientArr[i].length;j++){
-						var cell = document.createElement("td");
-						cell.style.border = "1 px solid yellow";
-						cell.textContent = clientArr[i][j];
-						row.appendChild(cell);
-					}
-					table.appendChild(row);
-					currentRow.onclick = createClickHandler(currentRow);
-				}
-				//table.style.border = "1 px solid black";
-				//document.getElementById("displaySettings").appendChild(table);
-			}
-			function validateAddClient(){
-				if(document.getElementById("fn").value == "" || document.getElementById("un").value == "" 
-				|| document.getElementById("pw1").value=="" ||document.getElementById("pw2").value == "" 
-				|| document.getElementById("lblLat2").value == ""
-				|| document.getElementById("lblLong2").value == ""){
-				alert("Please make sure all required fields are entered");
-				}
-				else if(document.getElementById("pw1").value != document.getElementById("pw2").value){
-					alert("The passwords entered does not match");
-				}
-				else{
-				document.getElementById("clientForm").submit();
-				}
-			}
-			function init(){
-			    myGoogleMap();
-			}
-			function addcliententer(e, textarea){
-                var code = (e.keyCode ? e.keyCode : e.which);
-                if(code == 13) { //Enter keycode
-                    document.getElementById("addClientButton").click();
-                }
-            }
-			</script>
 	</head>
-	<body>
+	<body onload="init();">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="main.html">Erbium Insect Tracker</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,15 +34,16 @@
 		<div id="addClient" style="border:3px solid black;color:white; width: 700px; margin: 0 auto; background-color:rgba(0, 0, 0, 0.5);padding:20px;">
 			<h2 style="text-align:center;">Add client details below</h2>
 			<div id="addClientForm" style="margin:auto;">
-				<form method= "POST" onsubmit="return false" id="clientForm" action="addClient.php"onKeyPress="addcliententer(event, this)">
-					<input type="text" placeholder="FullName" name="fullname" id="fn"><br><br>
-					<input type="text" placeholder="Username" name="username" id="un"><br><br>
-					<input type="password" placeholder="Password" name="password" id="pw1"><br><br>
-					<input type="password" placeholder="Confirm Password" id="pw2"><br><br>
+				<form method= "POST" onsubmit="return false" id="clientForm" action="signup.php"onKeyPress="addcliententer(event, this)">
+					<input type="text" required placeholder="FullName" name="fullname" id="fn"><br><br>
+					<input type="email" required placeholder="Email address" name="username" id="email" onfocusout="setEmail(this.value);"><br><br>
+					<input type="password" required placeholder="Password" name="password" id="pw1"><br><br>
+					<input type="password" required placeholder="Confirm Password" id="pw2"><br><br>
 					<p>Select the location of the client</p>
 					<div id="Map" style="width:425px;height:220px;"></div>
+                    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
 
-                <script>
+                    <script>
 				var myLat;
 				var myLong;
 				function myGoogleMap() {
@@ -153,11 +84,57 @@
                 </script>
 
 
-					<label>Lat: </label><input type="text" id="lblLat2" name="clientLat">
-					<label>Long: </label><input type="text" id="lblLong2" name="clientLong"><br>
+					<label>Lat: </label><input type="text" required id="lblLat2" name="clientLat">
+					<label>Long: </label><input type="text" required id="lblLong2" name="clientLong"><br>
 					<button onclick="validateAddClient()" id="addClientButton">Add Client</button>
 				</form>
+                <a href="viewClients.php">Go Back</a>
 			</div>
-	
+            <script src="jquery-3.2.1.js"></script>
+            <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+            <script src="modalJS.js"></script>
+            <script>
+                var clientArr;
+                $.get("getClients.php", function(data, status){
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    if(status === "success"){
+                        clientArr = JSON.parse(data);
+                    }
+                });
+                var id;
+                var email;
+                function setEmail(value){
+                    email = value;
+                }
+                //var enteredEmail = document.getElementById("email").value;
+                function validateAddClient(){
+                    var found = false;
+                    console.log(clientArr);
+                    for(i=0;i<clientArr.length;i++){
+                        //alert(enteredEmail);
+                        if(clientArr[i][2] == email){
+                            found = true;
+                        }
+                    }
+                    if(document.getElementById("pw1").value != document.getElementById("pw2").value){
+                        alert("The passwords entered does not match");
+                    }
+                    else if(found == true){
+                        alert("Email already exists");
+                    }
+                    else{
+                        document.getElementById("clientForm").submit();
+                    }
+                }
+                function init(){
+                    myGoogleMap();
+                }
+                function addcliententer(e, textarea){
+                    var code = (e.keyCode ? e.keyCode : e.which);
+                    if(code == 13) { //Enter keycode
+                        document.getElementById("addClientButton").click();
+                    }
+                }
+            </script>
 </body>
 </html>

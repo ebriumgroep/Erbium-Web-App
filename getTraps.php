@@ -6,7 +6,7 @@
         die("Connection failed: " . $conn->connect_error);
     }
 	session_start();
-    $sql = "SELECT  device_id,client_id,hardware_id,token,trap_group,Upload_Interval,Battery_Percent from device ORDER BY client_id ASC";
+    $sql = "SELECT  device_id,client_id,token,description,trap_group,Upload_Interval,Battery_Percent from device ORDER BY client_id ASC";
     $result = $conn->query($sql);
 	
 	if($result->num_rows > 0)
@@ -14,7 +14,7 @@
         $trap_array = array();
 		while ($row = $result->fetch_assoc()) {
             $trap_array[] = array($row["device_id"],$row["client_id"],
-			$row["hardware_id"],$row["token"],$row["trap_group"],$row["Upload_Interval"],
+			$row["token"],$row["description"],$row["trap_group"],$row["Upload_Interval"],
 			$row["Battery_Percent"]);
 		}
 	}

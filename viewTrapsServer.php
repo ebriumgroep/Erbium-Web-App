@@ -1,11 +1,13 @@
 <?php 
 	session_start();
-	$db = mysqli_connect('localhost', 'id7227985_root', 'erbium', 'id7227985_erbium');
-
+	//Hulisani db
+	//$db = mysqli_connect('localhost', 'id7227985_root', 'erbium', 'id7227985_erbium');
+    //Anrich db
+    $db = mysqli_connect('localhost', 'root', '', 'id7227985_erbium');
 	// initialize variables
 	$client_id = 0;
-	$hardware_id = "";
-	$token = 0;
+	$token = "";
+	$description = 0;
 	$type = "";
 	$Upload_Interval = "";
 	$caught = 0;
@@ -22,8 +24,8 @@
 	if (isset($_POST['update'])) {
 		$device_id = $_POST['device_id'];
 		$client_id = $_POST['client_id'];
-		$hardware_id = $_POST['hardware_id'];
 		$token = $_POST['token'];
+		$description = $_POST['description'];
 		$type = $_POST['type'];
 		$Upload_Interval = $_POST['Upload_Interval'];
 		$caught = $_POST['caught'];
@@ -31,7 +33,7 @@
 		$Battery_Percent = $_POST['Battery_Percent'];
 
 		mysqli_query($db, "UPDATE device SET client_id='$client_id', 
-		hardware_id='$hardware_id', 
+		description='$description', 
 		token='$token', 
 		trap_group='$type',
 		Upload_Interval='$Upload_Interval',
