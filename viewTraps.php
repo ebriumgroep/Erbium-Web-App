@@ -19,6 +19,7 @@ include('viewTrapsServer.php');
 
 	}
 ?>
+<?php $results = mysqli_query($db, "SELECT * FROM device"); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,6 +27,58 @@ include('viewTrapsServer.php');
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
     <script src="jquery-3.2.1.js"></script>
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
+    <script src="modalJS.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=allTraps" type="text/javascript"></script>
+    <script>
+        $(document).ready(function(){
+            $(document).on('click', "#mapOfAll", function() {
+                $("#showMoreModal").modal('show');
+            });
+
+        });
+        function allTraps() {
+            //var t = document.getElementById("userlat").valuel
+            //alert(t);
+            // myMap();
+            //alert(userObject.longitude);
+            //Also store the farm location to be the centre point
+            array = [<?php while ($row = mysqli_fetch_array($results)) ?>
+
+                [ <?php echo $row['token'] ?>, <?php echo $row['latitude'] ?>, <?php echo $row['longitude'] ?> ]
+            ];
+            console.log(array);
+            var allTrapLocations = [
+                ['trap1','-25.758972931872734','28.231539476196303'],
+                ['trap2','-25.767166630316538','28.213600862304702'],
+                ['trap3','-25.75510778350059','28.25282548693849']
+            ];//to hold trap locations for user
+            //alert(userObject.latitude);
+            var map = new google.maps.Map(document.getElementById('showTrapLocationMap'), {
+                zoom: 11,
+                center: new google.maps.LatLng(-25.758972931872734,28.231539476196303),
+                mapTypeId: google.maps.MapTypeId.MAPS
+            });
+
+            var infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+
+            for (i = 0; i < allTrapLocations.length; i++) {
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(allTrapLocations[i][1], allTrapLocations[i][2]),
+                    map: map
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(allTrapLocations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+        }
+    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -61,7 +114,7 @@ include('viewTrapsServer.php');
 		</div>
 	<?php endif ?>
 
-<?php $results = mysqli_query($db, "SELECT * FROM device"); ?>
+
     <h2>Edit trap details below</h2>
 
     <form name="form" action="" method="get">
@@ -70,6 +123,24 @@ include('viewTrapsServer.php');
           where client_id LIKE '$temp%'"); ?> ">GO</button>
     </form>
 <div id="mainDivEdit">
+    <button id="mapOfAll">View map of all traps</button>
+    <div id="showMoreModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Map of all trap locations</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div id="showTrapLocationMap" style="width:425px;height:220px;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 <table>
 	<thead>
 		<tr>
