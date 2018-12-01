@@ -25,7 +25,7 @@
 		var allTrapArr;
 		var farmLat;
 		var farmLong;
-            var userObject = {fullName:"", username:"", latitude:0.0, longitude:0.0};
+            var userObject = {fullName:"", username:"", latitude:0.0, longitude:0.0, admin:0};
             var clientDeviceIdArray= [];
 			//test if admin is logged in -> if so then enable admin link
 
@@ -82,6 +82,7 @@
                         userObject.username = data[1];
                         userObject.latitude = data[2];
                         userObject.longitude = data[3];
+                        userObject.admin = data[4];
                         myLat = userObject.latitude;
                         myLong = userObject.longitude;
                         document.getElementById("user_name").innerHTML = userName+'&nbsp;'+userObject.fullName;
@@ -584,7 +585,7 @@
 			}
 			var OptionClicked;
 			function setSortDropDown(){
-                if(userObject.fullName != "User 111"){
+                if(userObject.admin != "1"){
 					document.getElementById("linkToAdmin").style.visibility = 'hidden';
 				}
 				else {

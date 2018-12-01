@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 session_start();
 $active_client = $_SESSION['clientId'];
 
-$sql = "SELECT  client_id, full_name, username, latitude, longitude from client WHERE client_id='$active_client'";
+$sql = "SELECT  client_id, full_name, username, latitude, longitude, Admin from client WHERE client_id='$active_client'";
 $result = $conn->query($sql);
 $row = $result->fetch_assoc();
 
@@ -25,5 +25,6 @@ $output[0] = $row["full_name"];
 $output[1] = $row["username"];
 $output[2] = $row["latitude"];
 $output[3] = $row["longitude"];
+$output[4] = $row["Admin"];
 
 echo json_encode($output);
