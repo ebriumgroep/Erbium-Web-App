@@ -673,20 +673,21 @@
                         }
                     }
 				}*/
+
                 if(sel.selectedIndex !== 0 && sel.selectedIndex !== 1 && sel.selectedIndex !== 2 && sel.selectedIndex !== 3){
                     for(var i = 0; i < tempA.length; i++) {
                         if(tempA[i][2] == OptionClicked){
                             //individualTraps.push(tempA[i]);
-							string = tempA[i][0] + "," +tempA[i][1] + "," +tempA[i][2] + "," +tempA[i][3] + "," +
+							/*string = tempA[i][0] + "," +tempA[i][1] + "," +tempA[i][2] + "," +tempA[i][3] + "," +
                                 tempA[i][4] + "," +tempA[i][5] + "," +tempA[i][6] + "," +tempA[i][7] + "," +
-                                tempA[i][8] + "," +tempA[i][9] + "," +tempA[i][10] + "," +tempA[i][11];
-                            filteredTraps[filteredTraps.length] = new Array(tempA[i]);
+                                tempA[i][8] + "," +tempA[i][9] + "," +tempA[i][10] + "," +tempA[i][11];*/
+                            //filteredTraps[filteredTraps.length] = new Array(tempA[i]);
 
                         }
                     }
                     //filteredTraps.push(individualTraps);
                     //console.log(tempA);
-                    console.log(filteredTraps[1][1]);
+                    console.log(filteredTraps);
                     var maintrapdiv = document.getElementById("trapsDisplay");
                     maintrapdiv.innerHTML = '';//delete child elements on div
                     numOfTraps = 0;
@@ -788,7 +789,7 @@
 				<ul class="navbar-nav">
 
 					<li class="nav-item">
-						<a class="nav-link" href="contactus.html">contact us</a>
+						<a class="nav-link" href="contactus.html">Contact Us</a>
 					</li>
 					<li class="nav-item" id="linkToAdmin">
 						<a class="nav-link" href="adminOptions.html" id="adminLink">Admin</a>
@@ -843,16 +844,30 @@
 
 				</div>
 				<div id="changeAllTrapIntervals" class="prefsDivs">
-					<h3>Select the upload inteval to apply to all traps</h3>
-					<form id="newUploadForm" method="POST" action="" onsubmit="return false">
-						<select id="newUploadInterval">
+				<h3>Select the upload inteval to apply to all traps</h3>
+				<form id="newUploadForm" method="POST" action="" onsubmit="return false">
+					<select id="newUploadInterval">
+						<option value="none">(--Select upload interval--)</option>
+						<option value="Everyhour">Every hour</option>
+						<option value="fiveperday">Five times a day</option>
+						<option value="threeperday">Three times a day</option>
+						<option value="onceperday">Once a day</option>
+					</select>
+					<button class="btn" onclick="validateNewUpload();">Submit</button><br><br>
+				</form>
+
+				</div>
+				<div id="changeSensingInterval" class="prefsDivs">
+					<h3>Select the environment sensing inteval to apply to all traps</h3>
+					<form id="newSensing" method="POST" action="" onsubmit="return false">
+						<select id="newSensingInterval">
 							<option value="none">(--Select upload interval--)</option>
 							<option value="Everyhour">Every hour</option>
 							<option value="fiveperday">Five times a day</option>
 							<option value="threeperday">Three times a day</option>
 							<option value="onceperday">Once a day</option>
 						</select>
-						<button class="btn" onclick="validateNewUpload();">Submit</button><br><br>
+						<button class="btn" onclick="">Submit</button><br><br>
 					</form>
 
 				</div>
@@ -869,8 +884,8 @@
         <button id="trapAddButton" class="buttons">Add Trap </button><br>
 		<input type="text" id="userlat">
         <label id="trapNo" style="color:white; float:right;padding:0;margin:0;"></label><br>
-        <select style="float:right;" id="sortDropdown" onclick="setOptionCLicked();">
-			<option selected disabled>Sort Traps By  (choose option)</option>
+        <select style="float:right;" id="sortDropdown" onchange="setOptionCLicked();">
+			<option selected disabled>Sort/Filter Traps by (choose option)</option>
 			<option value="numOfMoths">Number of moths</option>
 			<option value="Battery">Battery %</option>
 			<option value="Temp">Temp</option>
@@ -1032,7 +1047,7 @@
                     ];//to hold trap locations for user
                     //alert(userObject.latitude);
                     var map = new google.maps.Map(document.getElementById('showTrapLocationMap'), {
-                        zoom: 13,
+                        zoom: 19,
                         center: new google.maps.LatLng(lat,long),
                         mapTypeId: google.maps.MapTypeId.SATELLITE
                     });

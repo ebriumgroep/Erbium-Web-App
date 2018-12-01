@@ -29,56 +29,7 @@ include('viewTrapsServer.php');
     <script src="bootstrap-4.0.0-dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="bootstrap-4.0.0-dist/css/bootstrap.min.css">
     <script src="modalJS.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=allTraps" type="text/javascript"></script>
-    <script>
-        $(document).ready(function(){
-            $(document).on('click', "#mapOfAll", function() {
-                $("#showMoreModal").modal('show');
-            });
 
-        });
-        function allTraps() {
-            //var t = document.getElementById("userlat").valuel
-            //alert(t);
-            // myMap();
-            //alert(userObject.longitude);
-            //Also store the farm location to be the centre point
-            array = [<?php while ($row = mysqli_fetch_array($results)) ?>
-
-                [ <?php echo $row['token'] ?>, <?php echo $row['latitude'] ?>, <?php echo $row['longitude'] ?> ]
-            ];
-            console.log(array);
-            var allTrapLocations = [
-                ['trap1','-25.758972931872734','28.231539476196303'],
-                ['trap2','-25.767166630316538','28.213600862304702'],
-                ['trap3','-25.75510778350059','28.25282548693849']
-            ];//to hold trap locations for user
-            //alert(userObject.latitude);
-            var map = new google.maps.Map(document.getElementById('showTrapLocationMap'), {
-                zoom: 11,
-                center: new google.maps.LatLng(-25.758972931872734,28.231539476196303),
-                mapTypeId: google.maps.MapTypeId.MAPS
-            });
-
-            var infowindow = new google.maps.InfoWindow();
-
-            var marker, i;
-
-            for (i = 0; i < allTrapLocations.length; i++) {
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(allTrapLocations[i][1], allTrapLocations[i][2]),
-                    map: map
-                });
-
-                google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                    return function () {
-                        infowindow.setContent(allTrapLocations[i][0]);
-                        infowindow.open(map, marker);
-                    }
-                })(marker, i));
-            }
-        }
-    </script>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -90,7 +41,7 @@ include('viewTrapsServer.php');
         <ul class="navbar-nav">
 
             <li class="nav-item">
-                <a class="nav-link" href="contactus.html">contact us</a>
+                <a class="nav-link" href="contactus.html">Contact Us</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="adminOptions.html">Admin</a>
@@ -132,6 +83,9 @@ include('viewTrapsServer.php');
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <select id="clientFilter" onchange="filter();">
+                        <option>All Clients</option>
+                    </select>
                     <div id="showTrapLocationMap" style="width:425px;height:220px;"></div>
                 </div>
                 <div class="modal-footer">
@@ -226,5 +180,109 @@ include('viewTrapsServer.php');
 	</div>
 </form>
 </div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=allTraps" type="text/javascript"></script>
+<script>
+    var temp;
+    var temp2;
+    var arrayLocations = [];
+    var clientNames =[];
+    $(document).ready(function(){
+        $(document).on('click', "#mapOfAll", function() {
+            $("#showMoreModal").modal('show');
+        });
+
+    });
+    var xhrr = new XMLHttpRequest();
+    xhrr.onreadystatechange = function() {
+        if (xhrr.readyState == XMLHttpRequest.DONE) {
+            //console.log(xhrr.responseText);
+            temp = JSON.parse(xhrr.responseText);
+        }
+    }
+    xhrr.open('GET', 'getTraps.php', false);
+    xhrr.send(null);
+
+    for(i=0;i<temp.length;i++){
+        arrayLocations.push(temp[i][7],temp[i][8]);
+        //arrayLocations.push(temp[i][8]);
+    }
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            //console.log(xhrr.responseText);
+            temp2 = JSON.parse(xhr.responseText);
+
+        }
+    }
+    xhr.open('GET', 'getClients.php', false);
+    xhr.send(null);
+    for(j=0;j<temp2.length;j++){
+        clientNames.push(temp2[j][1]);
+    }
+    var select = document.getElementById("clientFilter");
+    for(j=0;j<clientNames.length;j++){
+        var newSelect = document.createElement('option');
+        newSelect.innerHTML = clientNames[j];
+        newSelect.value = clientNames[j];
+        select.appendChild(newSelect);
+    }
+    function filter(){
+        var eSelect = document.getElementById("clientFilter");
+        OptionClicked = eSelect.options[eSelect.selectedIndex].text;
+
+        if(eSelect.selectedIndex !== 0){
+            //alert(OptionClicked);
+            console.log(clientNames);
+            for(i=0;i<clientNames.length;i++){
+                if(clientNames[i] === OptionClicked){
+                    alert(OptionClicked);
+                }
+            }
+        }
+    }
+    //console.log(arrayLocations);
+    function allTraps() {
+        //var t = document.getElementById("userlat").valuel
+        //alert(t);
+        // myMap();
+        //alert(userObject.longitude);
+        //Also store the farm location to be the centre point
+        array = [ <?php while ($row = mysqli_fetch_array($results)) ?>
+
+            [ <?php echo $row['token'] ?>, <?php echo $row['latitude'] ?>, <?php echo $row['longitude'] ?> ]
+        ];
+        console.log(array);
+        var allTrapLocations = [
+            ['trap1','-25.758972931872734','28.231539476196303'],
+            ['trap2','-25.767166630316538','28.213600862304702'],
+            ['trap3','-25.75510778350059','28.25282548693849']
+        ];//to hold trap locations for user
+        //alert(userObject.latitude);
+        var map = new google.maps.Map(document.getElementById('showTrapLocationMap'), {
+            zoom: 11,
+            center: new google.maps.LatLng(-25.758972931872734,28.231539476196303),
+            mapTypeId: google.maps.MapTypeId.SATELLITE
+        });
+
+        var infowindow = new google.maps.InfoWindow();
+
+        var marker, i;
+
+        for (i = 0; i < arrayLocations.length; i++) {
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(arrayLocations[i], arrayLocations[i+1]),
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                return function () {
+                    infowindow.setContent(allTrapLocations[i][0]);
+                    infowindow.open(map, marker);
+                }
+            })(marker, i));
+        }
+    }
+</script>
 </body>
 </html>

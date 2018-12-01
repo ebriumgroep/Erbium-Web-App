@@ -35,7 +35,7 @@ include('viewClientsServer.php');
         <ul class="navbar-nav">
 
             <li class="nav-item">
-                <a class="nav-link" href="contactus.html">contact us</a>
+                <a class="nav-link" href="contactus.html">Contact Us</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="adminOptions.html">Admin</a>
