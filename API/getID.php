@@ -6,17 +6,17 @@
  * Time: 18:13
  */
 
-include 'dbConnect.php';
+include '../dbConnect.php';
 $conn = connect_database();
 // Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$hardwareID = file_get_contents("php://input");
-$sql = "SELECT hardware_id, device_id
+$token = file_get_contents("php://input");
+$sql = "SELECT token, device_id
 FROM device
-WHERE hardware_id = '$hardwareID';";
+WHERE token = '$token';";
 $result = $conn->query($sql);
 $size = $result->num_rows;
 

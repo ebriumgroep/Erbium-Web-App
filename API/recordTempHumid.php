@@ -1,5 +1,5 @@
 <?php
-    include 'dbConnect.php';
+    include '../dbConnect.php';
     $conn = connect_database();
     // Check connection
     if ($conn->connect_error) {
@@ -10,6 +10,11 @@
     //data = <data-loss-flag>,<signal-strength>,<bit-error-rate>, <battery-percentage>,<device-id>,<date>,<temperature>, [<humidity>]
     $data = explode(",", file_get_contents("php://input"));
 
+    if(count($data) < 7 || count($data) > 8 ){
+        echo '{FAILURE}';
+        exit();
+    }
+
     $data_loss_flag = $data[0];
     $signal_strength = $data[1];
     $bit_error_rate = $data[2];
@@ -17,7 +22,7 @@
     $deviceID = $data[4];
     $timeStamp = $data[5];
     $temperature = $data[6];
-    $humidity = 0;
+    $humidity = -1;
 
     if(count($data)>7)
         $humidity = $data[7];

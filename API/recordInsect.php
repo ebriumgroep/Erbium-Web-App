@@ -1,5 +1,5 @@
 <?php
-    include 'dbConnect.php';
+    include '../dbConnect.php';
     $conn = connect_database();
     // Check connection
     if ($conn->connect_error) {
@@ -9,6 +9,11 @@
     //echo 'Value:'.$HTTP_RAW_POST_DATA;
     //data = <data-loss-flag>,<signal-strength>,<bit-error-rate>, <battery-percentage>,<device-id>,<date>
     $data = explode(",", file_get_contents("php://input"));
+
+    if(count($data) != 6){
+        echo '{FAILURE}';
+        exit();
+    }
 
     $data_loss_flag = $data[0];
     $signal_strength = $data[1];

@@ -15,7 +15,7 @@ if($result->num_rows > 0)
 
     while ($row = $result->fetch_assoc()) {
         $trap_array = array();
-        $trap_array['label'] = $row['hardware_id'];
+        $trap_array['label'] = $row['token'];
         $trap_array['value'] = $row['caught'];
         array_push($jsonArray, $trap_array);
     }
