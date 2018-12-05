@@ -218,13 +218,13 @@ include('viewTrapsServer.php');
     xhr.open('GET', 'getClients.php', false);
     xhr.send(null);
     for(j=0;j<temp2.length;j++){
-        clientNames.push(temp2[j][1]);
+        clientNames.push(temp2[j]);
     }
     var select = document.getElementById("clientFilter");
     for(j=0;j<clientNames.length;j++){
         var newSelect = document.createElement('option');
-        newSelect.innerHTML = clientNames[j];
-        newSelect.value = clientNames[j];
+        newSelect.innerHTML = clientNames[j][1];
+        newSelect.value = clientNames[j][1];
         select.appendChild(newSelect);
     }
     function filter(){
@@ -235,7 +235,8 @@ include('viewTrapsServer.php');
             //alert(OptionClicked);
             console.log(clientNames);
             for(i=0;i<clientNames.length;i++){
-                if(clientNames[i] === OptionClicked){
+                if(clientNames[i][1] === OptionClicked){
+
                     alert(OptionClicked);
                 }
             }
