@@ -17,6 +17,7 @@ $deviceID = $_POST["device_id"];
 $active_hardware = $_POST["description"];
 $active_type = $_POST['type'];
 $active_uploadInterval = $_POST['upload_interval'];
+$active_sensingInterval = $_POST['sensing_interval'];
 $active_latitude = $_POST["editTrapLat"];
 $active_longitude = $_POST["editTrapLong"];
 
@@ -24,6 +25,7 @@ $sql = "UPDATE device
         SET description = '$active_hardware',
             trap_group = '$active_type',
             Upload_Interval = '$active_uploadInterval',
+            Sensing_Interval = '$sctive_sensingInterval',
             latitude = '$active_latitude',
             longitude = '$active_longitude'
         WHERE token = '$deviceID';";
