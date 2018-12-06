@@ -19,7 +19,7 @@
 	{
         $result_array = array();
 		while ($row = $result->fetch_assoc()) {
-            $result_array[] = array($row["token"],$row["caught"],$row["trap_group"],$row["Upload_Interval"],
+            $result_array[] = array($row["token"],$row["caught"],$row["trap_group"],$row["Upload_Interval"],$row["Sensing_Interval"],
                 $row["Battery_Percent"], $row["device_id"], $row["latitude"],$row["longitude"],$row["description"],
                 $row["signal_strength"],$row["last_updated"],$row["data_available"]);
             //$returnedString .=  $row["hardware_id"].' '.$row["type"]."\n";,

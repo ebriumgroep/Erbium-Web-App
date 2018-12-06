@@ -17,24 +17,26 @@
 
 	session_start();
 	$active_client = $_SESSION['clientId'];
-	$active_hardware = $_POST["token"];
-	$active_token = 0;
+	$active_token = $_POST["token"];
+	//$active_token = 0;
+	$active_description = $_POST["description"];
 	$active_type = $_POST['type'];
 	$active_uploadInterval = $_POST['upload_interval'];
+    $active_sensingInterval = $_POST['sensing_interval'];
 	//new
 	$active_lat = $_POST['trapLat'];
 	$active_long = $_POST['trapLong'];
 
 
 	//just need to add the lat and long and hardware id to the location table as well
-	$sql = "INSERT INTO device(client_id, token, description, trap_group, Upload_Interval, caught, tempCount)
-			VALUES ('$active_client', '$active_hardware', $active_token, '$active_type','$active_uploadInterval', 0, 0);
-			INSERT INTO location(device_id,latitude,longitude)
-			VALUES ((SELECT device_id FROM device where token='$active_hardware'),'$active_lat','$active_long');";
+	$sql = "INSERT INTO device(client_id, token, description, trap_group, Upload_Interval, Sensing_Interval,caught,
+            tempCount,latitude,longitude)
+			VALUES ('$active_client','$active_token', '$active_description', '$active_type','$active_uploadInterval',
+			'$active_sensingInterval', 0, 0,'$active_lat','$active_long')";
 
 	$fullname = $_SESSION['fullname'];
 
-	if($conn->multi_query($sql) === true){
+	if($conn->query($sql) === true){
 		$conn->close();
 		header("Location:main.html");
 		// echo "<script>
@@ -45,6 +47,7 @@
 	else{
 		$conn->close();
 		echo "Please fill all fields.....!!!!!!!!!!!!";
+        echo "Error: " . $sql . "<br>" . $conn->error;
 		// echo "<script>
 		// window.location.href = 'addTrap.html';
 	  // </script>";

@@ -182,38 +182,40 @@
                                         humid = this.responseText;
                                     };
                                     xhr2.send('device_id=' + array[i][5]);
-                                    let id = array[i][5];
+                                    let id = array[i][6];
                                     let hid = array[i][0];
                                     let c = array[i][1];
                                     let t = array[i][2];
                                     let u = array[i][3];
-                                    let b = array[i][4];
-                                    let lat = array[i][6];
-                                    let long = array[i][7];
-                                    let descrip = array[i][8];
-                                    let signal = array[i][9];
-                                    let lastUp = array[i][10];
-                                    let dataAv = array[i][11];
+                                    let sensInt = array[i][4]
+                                    let b = array[i][5];
+                                    let lat = array[i][7];
+                                    let long = array[i][8];
+                                    let descrip = array[i][9];
+                                    let signal = array[i][10];
+                                    let lastUp = array[i][11];
+                                    let dataAv = array[i][12];
                                     let avrTemp = temp;
                                     let avrHum = humid;
                                     //trapsWithTemp.push(hid, c, t, u,b,avrHum,avrTemp,id,lat,long,descrip,signal,lastUp,dataAv);
-                                    addTrapDiv(hid, c, t, u,b,id,lat,long,descrip,signal,lastUp,dataAv,avrHum,avrTemp);
+                                    addTrapDiv(hid, c, t, u,sensInt,b,id,lat,long,descrip,signal,lastUp,dataAv,avrHum,avrTemp);
                                     clientDeviceIdArray.push(id);
-                                    trapArrSortByTemp[i] = new Array(hid, c, t, u,b,avrHum,avrTemp,id,lat,long,descrip,signal,lastUp,dataAv);
-                                    trapArrSortByTemp[i] = new Array(hid,c,t,u,b,id,lat,long,descrip,signal,lastUp,dataAv,avrHum,avrTemp);
+                                    trapArrSortByTemp[i] = new Array(hid, c, t, u,sensInt ,b,avrHum,avrTemp,id,lat,long,descrip,signal,lastUp,dataAv);
+                                    trapArrSortByTemp[i] = new Array(hid,c,t,u,sensInt,b,id,lat,long,descrip,signal,lastUp,dataAv,avrHum,avrTemp);
                                     numOfTraps++;
                                     }
                 document.getElementById("trapNo").innerHTML = "The number of traps atm is: " + numOfTraps;
             }
 			console.log(trapArrSortByTemp);
 		    var no=0;
-            function addTrapDiv(tempName,caught,type,upload,battery,id,latitude,longitude,description,sig,lastU,dataA,averageHumid,averageTemp)
+            function addTrapDiv(tempName,caught,type,upload,sensInt,battery,id,latitude,longitude,description,sig,lastU,dataA,averageHumid,averageTemp)
             {
                   no++;
                 //alert(averageHumid);
                 var name = tempName;
                 var TrapType = type;
                 var UploadInt = upload;
+                var sensingUp = sensInt;
                 var bat_perc = battery;
                 var tempHumid = averageHumid;
                 var tempTemp = averageTemp;
@@ -246,6 +248,7 @@
                         document.getElementById("showDescription").value = description;
                         document.getElementById("showTrapGroup").value= TrapType;
                         document.getElementById("showUpload").value = UploadInt;
+                        document.getElementById("showSensing").value = sensingUp;
                         document.getElementById("showCaught").value = caught;
                         document.getElementById("showBattery").value = bat_perc;
                         document.getElementById("showSignal").value = signal;
@@ -1209,7 +1212,7 @@
                     else if(eSelect.selectedIndex === 3){
                         //SORT BY TEMP
                         tempB.sort(function(a, b) {
-                            return b[13] - a[13];
+                            return b[14] - a[14];
                         });
                         maintrapdiv.innerHTML = '';//delete child elements on div
                         numOfTraps = 0;
@@ -1457,10 +1460,18 @@
 						</div>
 						<div class="modal-body">
 							<form method="POST" action="addTrap.php" id="trapForm" onKeyPress="enterAddTrap(event, this)">
+								Description: <input type="text" required id="addTrapDescription" name="description"><br>
 								Trap Group: <input type="text" required id="addTraptype" name="type"><br>
 								Token: <input type="text" required  id="addTraphardware" name="token"><br>
-								Upload Interval: <!--<input type="text" id="editUpload"><br>-->
+								Upload Interval:
 								<select id="Trap_upload_interval"  required name="upload_interval">
+									<option value="Everyhour">Every hour</option>
+									<option value="fiveperday">Five times a day</option>
+									<option value="threeperday">Three times a day</option>
+									<option value="onceperday">Once a day</option>
+								</select><br>
+								Sensing Interval:
+								<select id="Trap_sensing_interval"  required name="sensing_interval">
 									<option value="Everyhour">Every hour</option>
 									<option value="fiveperday">Five times a day</option>
 									<option value="threeperday">Three times a day</option>
@@ -1541,6 +1552,7 @@
 							Description: <input type="text" disabled id="showDescription"><br>
 							Trap Group: <input type="text" disabled id="showTrapGroup"><br>
 							Upload Interval: <input type="text" disabled id="showUpload"><br>
+							Sensing Interval: <input type="text" disabled id="showSensing"><br>
 							Caught: <input type="text" disabled id="showCaught"><br>
 							Battery Percentage: <input type="text" disabled id="showBattery"><br>
 							Signal Strength: <input type="text" disabled id="showSignal"><br>
