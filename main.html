@@ -33,6 +33,7 @@
 		var allTrapArr;
 		var farmLat;
 		var farmLong;
+		var isAdmin;
             var userObject = {fullName:"", username:"", latitude:0.0, longitude:0.0, admin:0};
             var clientDeviceIdArray= [];
 			//test if admin is logged in -> if so then enable admin link
@@ -76,6 +77,7 @@
                 xhrr.send(null);
                 farmLat = testUserDetails[2];
                 farmLong = testUserDetails[3];
+                isAdmin = testUserDetails[4];
 				document.getElementById("userlat").value = farmLat;
                 $.get("user_details.php", function(data, status){
                     console.log("User data: ")
@@ -1150,7 +1152,9 @@
         }
 			var OptionClicked;
 			function setSortDropDown(){
-                if(userObject.admin === "1"){
+			    //alert(farmLat);
+                if(isAdmin === "1"){
+                   // alert("asd");
 					//document.getElementById("linkToAdmin").style.visibility = 'hidden';
                     var ul = document.getElementById("mainList");
                     var li = document.createElement("li");
@@ -1249,7 +1253,8 @@
 				allLocations[i] = new Array(t[i][2],t[i][7],t[i][8]);
 			}
 			console.log(allLocations);
-
+			function addLocation(name,lat,long){
+			}
 
             //console.log(allLocations);
             var allTrapLocations = allLocations;//to hold trap locations for user
@@ -1328,6 +1333,7 @@
 					</li>-->
 				</ul>
 				<ul class="navbar-nav ml-auto">
+					<p id="user_name"></p>
 					<li class="nav-item">
 						<a class="nav-link" href="logout.php" id="Out">Logout</a>
 					</li>

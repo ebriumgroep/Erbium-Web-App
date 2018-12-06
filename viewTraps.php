@@ -203,7 +203,7 @@ include('viewTrapsServer.php');
     xhrr.send(null);
 
     for(i=0;i<temp.length;i++){
-        arrayLocations.push(temp[i][7],temp[i][8]);
+        arrayLocations[i] = new Array(temp[i][1],temp[i][7],temp[i][8]);
         //arrayLocations.push(temp[i][8]);
     }
 
@@ -236,14 +236,18 @@ include('viewTrapsServer.php');
             console.log(clientNames);
             for(i=0;i<clientNames.length;i++){
                 if(clientNames[i][1] === OptionClicked){
-
-                    alert(OptionClicked);
+                    allTraps(clientNames[i][0]);
+                    //alert(OptionClicked);
                 }
             }
         }
+        else if (eSelect.selectedIndex === 0){
+            allTraps(0);
+        }
     }
     //console.log(arrayLocations);
-    function allTraps() {
+    function allTraps(id=0) {
+        document.getElementById("showTrapLocationMap").innerHTML = '';
         //var t = document.getElementById("userlat").valuel
         //alert(t);
         // myMap();
@@ -271,17 +275,36 @@ include('viewTrapsServer.php');
         var marker, i;
 
         for (i = 0; i < arrayLocations.length; i++) {
-            marker = new google.maps.Marker({
-                position: new google.maps.LatLng(arrayLocations[i], arrayLocations[i+1]),
-                map: map
-            });
+            if(id !== 0){
+                if(id === arrayLocations[i][0]){
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(arrayLocations[i][1], arrayLocations[i][2]),
+                        map: map
+                    });
 
-            google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                return function () {
-                    infowindow.setContent(allTrapLocations[i][0]);
-                    infowindow.open(map, marker);
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                        return function () {
+                            infowindow.setContent(allTrapLocations[i][0]);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
                 }
-            })(marker, i));
+            }
+            else{
+                marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(arrayLocations[i][1], arrayLocations[i][2]),
+                    map: map
+                });
+
+                google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    return function () {
+                        infowindow.setContent(allTrapLocations[i][0]);
+                        infowindow.open(map, marker);
+                    }
+                })(marker, i));
+            }
+
+
         }
     }
 </script>
