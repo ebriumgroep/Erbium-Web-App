@@ -30,13 +30,13 @@ $salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
 $saltedPW = $escapedPW.$salt;
 $hashedPW = hash('sha256', $saltedPW);
 
-$mailMessage = 'Hi '.$active_fullname.', your auto generated Erbium password is '.$active_password.'.';
+/*$mailMessage = 'Hi '.$active_fullname.', your auto generated Erbium password is '.$active_password.'.';
 $mailMessage = wordwrap($mailMessage, 70);
 if(mail($active_username, "Erbium Registration", $mailMessage))
     echo "Sent";
 else
     echo "Not sent";
-return;
+return;*/
 
 $tempStr = $active_fullname.'-'.$active_password;
 
@@ -47,9 +47,9 @@ $sql = "INSERT INTO client(full_name, username, password, salt, latitude, longit
 //echo $active_fullname.'-'.$active_username.'-'.$hashedPW.'-'.$salt;
 
 if($conn->query($sql) === true){
-    $mailMessage = 'Hi '.$active_fullname.', your auto generated Erbium password is '.$active_password.'.';
+    /*$mailMessage = 'Hi '.$active_fullname.', your auto generated Erbium password is '.$active_password.'.';
     $mailMessage = wordwrap($mailMessage, 70);
-    mail($active_username, "Erbium Registration", $mailMessage);
+    mail($active_username, "Erbium Registration", $mailMessage);*/
 
     $conn->close();
     echo "New user successfully added!";
