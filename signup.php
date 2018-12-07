@@ -19,10 +19,10 @@ $active_password = $_POST['password'];
 $active_latitude = $_POST['clientLat'];
 $active_longitude = $_POST['clientLong'];
 
-if(strlen($active_password)<8){
+/*if(strlen($active_password)<8){
     echo 'The password should be at least 8 characters long';
     exit();
-}
+}*/
 
 $escapedPW = mysqli_real_escape_string($conn, $active_password);
 $salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));

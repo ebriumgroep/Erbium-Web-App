@@ -35,10 +35,10 @@
 			<h2 style="text-align:center;">Add client details below</h2>
 			<div id="addClientForm" style="margin:auto;">
 				<form method= "POST" onsubmit="return false" id="clientForm" action="signup.php" onKeyPress="addcliententer(event, this)">
-					<input type="text" required placeholder="FullName" name="fullname" id="fn"><br><br>
-					<input type="email" required placeholder="Email address" name="username" id="email" onfocusout="setEmail(this.value);"><br><br>
-					<input type="password" required placeholder="Password" name="password" id="pw1"><br><br>
-					<input type="password" required placeholder="Confirm Password" id="pw2"><br><br>
+					<input type="text" required placeholder="FullName" name="fullname" id="fn"/><br><br>
+					<input type="text" required placeholder="Email address" name="username" id="email" /><br><br>
+					<input type="password" required placeholder="Password" name="password" id="pw1"/><br><br>
+					<input type="password" required placeholder="Confirm Password" id="pw2"/><br><br>
 					<p>Select the location of the client</p>
 					<div id="Map" style="width:425px;height:220px;"></div>
                     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=myGoogleMap" type="text/javascript"></script>
@@ -84,9 +84,9 @@
                 </script>
 
 
-					<label>Lat: </label><input type="text" required id="lblLat2" name="clientLat">
-					<label>Long: </label><input type="text" required id="lblLong2" name="clientLong"><br>
-					<button onclick="validateAddClient()" id="addClientButton">Add Client</button>
+					<label>Lat: </label><input type="text" required id="lblLat2" name="clientLat"/>
+					<label>Long: </label><input type="text" required id="lblLong2" name="clientLong"/><br>
+                    <input type="button" onclick="validateAddClient()" id="addClientButton" value="Add Client">
 				</form>
                 <a href="viewClients.php">Go Back</a>
 			</div>
@@ -106,23 +106,40 @@
                 function setEmail(value){
                     email = value;
                 }
+                function validateEmail(email) {
+                    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return re.test(String(email).toLowerCase());
+                }
                 //var enteredEmail = document.getElementById("email").value;
                 function validateAddClient(){
                     var found = false;
+                    var clear = true;
                     console.log(clientArr);
                     for(i=0;i<clientArr.length;i++){
                         //alert(enteredEmail);
-                        if(clientArr[i][2] == email){
+                        if(clientArr[i][2] == document.getElementById("email").value){
                             found = true;
                         }
                     }
+                    if(!validateEmail(document.getElementById("email").value)){
+                        alert("Please enter a valid email");
+                        clear = false;
+
+                    }
                     if(document.getElementById("pw1").value != document.getElementById("pw2").value){
                         alert("The passwords entered does not match");
+                        clear = false;
                     }
                     else if(found == true){
                         alert("Email already exists");
+                        clear = false;
                     }
-                    else{
+                    else if(document.getElementById("email").value === "" || document.getElementById("pw1").value === "" ||
+                    document.getElementById("lblLat2").value === "" || document.getElementById("fn").value === ""){
+                        alert("Please make sure all fields are entered");
+                        clear = false;
+                    }
+                    else if(clear === true){
                         document.getElementById("clientForm").submit();
                     }
                 }
