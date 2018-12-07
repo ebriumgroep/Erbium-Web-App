@@ -18,12 +18,10 @@
 	session_start();
 	$active_client = $_SESSION['clientId'];
 	$active_token = $_POST["token"];
-	//$active_token = 0;
 	$active_description = $_POST["description"];
 	$active_type = $_POST['type'];
 	$active_uploadInterval = $_POST['upload_interval'];
     $active_sensingInterval = $_POST['sensing_interval'];
-	//new
 	$active_lat = $_POST['trapLat'];
 	$active_long = $_POST['trapLong'];
 
