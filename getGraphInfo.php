@@ -36,9 +36,10 @@
 		$row = $result->fetch_assoc();
 		$deviceIDS[$i] = (int)$row['device_id'];
 	}
+	$deviceIDS_countable = $deviceIDS;
 	$deviceIDS = implode(', ', $deviceIDS);
 
-	if(count($deviceIDS)>0){
+	if(count($deviceIDS_countable)>0){
 		$sql = "SELECT * FROM trap_count 
                 where device_id IN ($deviceIDS)";
         $result = $conn->query($sql);
