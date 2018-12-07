@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: hulis
  * Date: 2018/12/07
- * Time: 13:27
+ * Time: 14:15
  */
 
 include 'dbConnect.php';
@@ -16,10 +16,12 @@ if ($conn->connect_error) {
 session_start();
 $active_client = $_SESSION['clientId'];
 //$active_client = 21;
-$newEmail = $_POST['newEmail1'];
+$newLatitude = $_POST['newLatitude'];
+$newLongitude = $_POST['newLongitude'];
 
 $sql = "UPDATE client
-SET username = '$newEmail'
+SET latitude = '$newLatitude',
+    longitude = '$newLongitude'
 WHERE client_id = '$active_client';";
 $result = $conn->query($sql);
 
