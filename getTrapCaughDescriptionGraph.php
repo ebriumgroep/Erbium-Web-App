@@ -17,6 +17,7 @@ if($result->num_rows > 0)
         $trap_array = array();
         $trap_array['label'] = $row['description'];
         $trap_array['value'] = $row['caught'];
+
         array_push($jsonArray, $trap_array);
     }
 }

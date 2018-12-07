@@ -670,44 +670,6 @@
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
                     xhrr2.send(null);
-                    const chartData3 = [
-                        {
-                            "label": "27-08-2018 00:00:00",
-                            "value": "5"
-                        },
-                        {
-                            "label": "27-10-2018 08:12:56",
-                            "value": "8"
-                        },
-                        {
-                            "label": "27-11-2018 13:12:22",
-                            "value": "3"
-                        },
-                        {
-                            "label": "30-11-2018 16:02:00",
-                            "value": "7"
-                        },
-                        {
-                            "label": "01-11-2018 16:02:00",
-                            "value": "12"
-                        },
-                        {
-                            "label": "05-11-2018 16:02:00",
-                            "value": "19"
-                        },
-                        {
-                            "label": "03-12-2018 16:02:00",
-                            "value": "2"
-                        },
-                        {
-                            "label": "04-12-2018 16:02:00",
-                            "value": "7"
-                        },
-                        {
-                            "label": "05-12-2018 16:02:00",
-                            "value": "11"
-                        },
-                    ]
                     var q = new Date();
                     q.setMonth(q.getMonth() - 6);
                     Object.keys(element).forEach(function(key) {
@@ -723,7 +685,6 @@
                             delete element[key];
                         }
                     });
-                    console.log(chartData3);
                     var chartProperties3 = {
                         "caption": "Caught over the last 6 months",
                         "xAxisName": "Time stamp",
@@ -750,7 +711,7 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                            //console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
