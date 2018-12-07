@@ -1607,6 +1607,15 @@
 				    alert("Upload interval has been changed for all traps");
 				}
 		}
+            function validateNewSensing(){
+                if(document.getElementById("newSensingInterval").selectedIndex === 0){
+                    alert("Please select a new upload interval first");
+                }
+                else {
+                    document.getElementById("newSensing").submit();
+                    alert("Sensing interval has been changed for all traps");
+                }
+            }
 		function validateNewDefaultLocation(){
 			    if(document.getElementById("lblDefaultLat").value === "" || document.getElementById("lblDefaultLong").value === ""){
 			        alert("Please select a new location first");
@@ -1709,7 +1718,7 @@
 							<option value="threeperday">Three times a day</option>
 							<option value="onceperday">Once a day</option>
 						</select>
-						<button class="btn" onclick="">Submit</button><br><br>
+						<button class="btn" onclick="validateNewSensing()">Submit</button><br><br>
 					</form>
 
 				</div>
