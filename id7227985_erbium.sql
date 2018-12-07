@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 07, 2018 at 10:33 PM
+-- Generation Time: Dec 07, 2018 at 10:40 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `client` (
 --
 
 INSERT INTO `client` (`client_id`, `full_name`, `username`, `password`, `salt`, `latitude`, `longitude`, `Admin`) VALUES
-(21, 'User 111', 'h@gmail.com', '872a2cfa8e8b2d1c7d242db1a94411fc245d023301b3874a9cbff398b6b5afeb', '2250f93dda581eaeb80f66d8098aac3f2aca17683c1ae775cf0b1db935aa76c1', 29.1265448, '-30.5684651', 1),
+(21, 'User 111', 'user111', '872a2cfa8e8b2d1c7d242db1a94411fc245d023301b3874a9cbff398b6b5afeb', '2250f93dda581eaeb80f66d8098aac3f2aca17683c1ae775cf0b1db935aa76c1', 29.1265448, '-30.5684651', 1),
 (22, 'User Two', 'user2', '9f53821947b75c191539b442a2079dc1a44aae1ed94b752d2510be6b1af40c17', 'b4f5e44910df674f917ff019f33beb8fb6bc7f01306562fbfb3e13494ce9854f', NULL, NULL, 0),
 (23, 'User Three', 'user3', '763fdeae6baf2b01400f78596b5e4abf29d9da135a1b6bf02a02819177d9e379', 'de8a39e8da1348f6d17e756cfcb4875a0f93c0269207c14d04da841b346fe61a', NULL, NULL, 0),
 (24, 'Anrich Moulder', 'Anrichm12345', '123', '3213124', 12, '11', 0),
