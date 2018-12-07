@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 session_start();
 $active_client = $_SESSION['clientId'];
 //$active_client = 21;
-$newInterval = $_POST['newInterval'];
+$newInterval = $_POST['newSensing'];
 
 $sql = "UPDATE device
 SET Sensing_Interval = '$newInterval'

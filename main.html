@@ -946,6 +946,295 @@
 
 
 			}
+            function trapTempPerDay(inter){
+                var element;
+                function sameDay(d1, d2) {
+                    return d1.getFullYear() === d2.getFullYear() &&
+                        d1.getMonth() === d2.getMonth() &&
+                        d1.getDate() === d2.getDate();
+                }
+                function sameMonth(d1, d2) {
+                    return d1.getFullYear() === d2.getFullYear() &&
+                        d1.getMonth() === d2.getMonth();
+                }
+                function sameYear(d1, d2) {
+                    return d1.getFullYear() === d2.getFullYear();
+                }
+                function threeMonths(d1,d2){
+                    return d1 > d2;
+                }
+                function sixMonths(d1,d2){
+                    return d1 > d2;
+                }
+                function threeYears(d1,d2){
+                    return d1 > d2;
+                }
+                if(inter === 30){
+                    var xhrr2 = new XMLHttpRequest();
+                    xhrr2.onreadystatechange = function() {
+                        if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                            //console.log(xhrr2.responseText);
+                            element = JSON.parse(xhrr2.responseText);
+                            //console.log(element);
+                        }
+                    }
+                    xhrr2.open('GET', 'getGraphTempInfo.php', false);
+                    xhrr2.send(null);
+                    //alert(element[1].label);
+                    var q = new Date();
+                    Object.keys(element).forEach(function(key) {
+                        //console.log(key, chartData3[key],chartData3[key].label);
+                        var readableDate = element[key].label.substring(3,6) + element[key].label.substring(0,2)
+                            + element[key].label.substring(5,element[key].label.length);
+                        //console.log(new Date(readableDate));
+                        var tDate = new Date(readableDate);
+                        //console.log(tDate);
+                        //console.log("today: ", q);
+                        if(!sameMonth(tDate,q)){
+                            //alert(tDate);
+                            //console.log(chartData3[2]);
+                            delete element[key];
+                        }
+                    });
+                    var chartProperties3 = {
+                        "caption": "Caught over the last month",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'tempGraph',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": element
+                        }
+                    });
+                    Chart3.render();
+                }
+                else if(inter === 3){
+                    var xhrr2 = new XMLHttpRequest();
+                    xhrr2.onreadystatechange = function() {
+                        if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                            //console.log(xhrr2.responseText);
+                            element = JSON.parse(xhrr2.responseText);
+                            //console.log(element);
+                        }
+                    }
+                    xhrr2.open('GET', 'getGraphTempInfo.php', false);
+                    xhrr2.send(null);
+                    var q = new Date();
+                    q.setMonth(q.getMonth() - 3);
+                    Object.keys(element).forEach(function(key) {
+                        //console.log(key, chartData3[key],chartData3[key].label);
+                        var readableDate = element[key].label.substring(3,6) + element[key].label.substring(0,2)
+                            + element[key].label.substring(5,element[key].label.length);
+                        //console.log(new Date(readableDate));
+                        var tDate = new Date(readableDate);
+                        //console.log("today: ", q);
+                        if(!threeMonths(tDate,q)){
+                            //alert(tDate);
+                            //console.log(chartData3[2]);
+                            delete element[key];
+                        }
+                    });
+                    var chartProperties3 = {
+                        "caption": "Caught over a the last 3 months",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'tempGraph',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": element
+                        }
+                    });
+                    Chart3.render();
+                }
+                else if(inter === 6){
+                    var xhrr2 = new XMLHttpRequest();
+                    xhrr2.onreadystatechange = function() {
+                        if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                            //console.log(xhrr2.responseText);
+                            element = JSON.parse(xhrr2.responseText);
+                            //console.log(element);
+                        }
+                    }
+                    xhrr2.open('GET', 'getGraphTempInfo.php', false);
+                    xhrr2.send(null);
+                    var q = new Date();
+                    q.setMonth(q.getMonth() - 6);
+                    Object.keys(element).forEach(function(key) {
+                        //console.log(key, chartData3[key],chartData3[key].label);
+                        var readableDate = element[key].label.substring(3,6) + element[key].label.substring(0,2)
+                            + element[key].label.substring(5,element[key].label.length);
+                        //console.log(new Date(readableDate));
+                        var tDate = new Date(readableDate);
+                        //console.log("today: ", q);
+                        if(!threeMonths(tDate,q)){
+                            //alert(tDate);
+                            //console.log(chartData3[2]);
+                            delete element[key];
+                        }
+                    });
+                    var chartProperties3 = {
+                        "caption": "Caught over the last 6 months",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'tempGraph',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": element
+                        }
+                    });
+                    Chart3.render();
+                }
+                else if(inter === 365){
+                    var xhrr2 = new XMLHttpRequest();
+                    xhrr2.onreadystatechange = function() {
+                        if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                            //console.log(xhrr2.responseText);
+                            element = JSON.parse(xhrr2.responseText);
+                            //console.log(element);
+                        }
+                    }
+                    xhrr2.open('GET', 'getGraphTempInfo.php', false);
+                    xhrr2.send(null);
+                    var q = new Date();
+                    Object.keys(element).forEach(function(key) {
+                        //console.log(key, chartData3[key],chartData3[key].label);
+                        var readableDate = element[key].label.substring(3,6) + element[key].label.substring(0,2)
+                            + element[key].label.substring(5,element[key].label.length);
+                        //console.log(new Date(readableDate));
+                        var tDate = new Date(readableDate);
+                        //console.log("today: ", q);
+                        if(!sameYear(tDate,q)){
+                            //alert(tDate);
+                            //console.log(chartData3[2]);
+                            delete element[key];
+                        }
+                    });
+                    //console.log(chartData3);
+                    var chartProperties3 = {
+                        "caption": "Caught over the last year",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'tempGraph',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": element
+                        }
+                    });
+                    Chart3.render();
+                }
+                else if(inter === 1095){
+                    var xhrr2 = new XMLHttpRequest();
+                    xhrr2.onreadystatechange = function() {
+                        if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                            //console.log(xhrr2.responseText);
+                            element = JSON.parse(xhrr2.responseText);
+                            //console.log(element);
+                        }
+                    }
+                    xhrr2.open('GET', 'getGraphTempInfo.php', false);
+                    xhrr2.send(null);
+                    var q = new Date();
+                    q.setFullYear(q.getFullYear()-3);
+                    Object.keys(element).forEach(function(key) {
+                        var readableDate = element[key].label.substring(3,6) + element[key].label.substring(0,2)
+                            + element[key].label.substring(5,element[key].label.length);
+                        //console.log(new Date(readableDate));
+                        var tDate = new Date(readableDate);
+                        //console.log("today: ", q);
+                        if(!threeYears(tDate,q)){
+                            //alert(tDate);
+                            //console.log(chartData3[2]);
+                            delete chartData3[key];
+                        }
+                    });
+                    var chartProperties3 = {
+                        "caption": "Caught over the last 3 years",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'tempGraph',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": element
+                        }
+                    });
+                    Chart3.render();
+                }
+                else if(inter === 0){
+                    var xhrr2 = new XMLHttpRequest();
+                    xhrr2.onreadystatechange = function() {
+                        if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                            //console.log(xhrr2.responseText);
+                            element = JSON.parse(xhrr2.responseText);
+                            console.log(element);
+                        }
+                    }
+                    xhrr2.open('GET', 'getGraphTempInfo.php', false);
+                    xhrr2.send(null);
+                    var chartProperties3 = {
+                        "caption": "Caught overall",
+                        "xAxisName": "Time stamp",
+                        "yAxisName": "Caught",
+                        "rotatevalues": "1",
+                        "theme": "zune"
+                    };
+                    Chart3 = new FusionCharts({
+                        type: 'line',
+                        renderAt: 'tempGraph',
+                        width: '550',
+                        height: '350',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": chartProperties3,
+                            "data": element
+                        }
+                    });
+                    Chart3.render();
+                    // }
+                }
+
+
+            }
+
 			function tempPerDay(inter){
                 var chartData4;
                 //willbe able to post device ids to get data from php file
@@ -1145,24 +1434,25 @@
                 }
 			}
         function tempPerDaySelect(){
-            if(document.getElementById("mothsPerDay").selectedIndex === 0){
-                tempPerDay(0);
+            if(document.getElementById("tempOptions").selectedIndex === 0){
+                trapTempPerDay(0);
             }
-            else if(document.getElementById("mothsPerDay").selectedIndex === 1){
-                tempPerDay(30);
+            else if(document.getElementById("tempOptions").selectedIndex === 1){
+                trapTempPerDay(30);
             }
-            else if(document.getElementById("mothsPerDay").selectedIndex === 2){
-                tempPerDay(3)
+            else if(document.getElementById("tempOptions").selectedIndex === 2){
+                trapTempPerDay(3)
             }
-            else if(document.getElementById("mothsPerDay").selectedIndex === 3){
-                tempPerDay(6)
+            else if(document.getElementById("tempOptions").selectedIndex === 3){
+                trapTempPerDay(6)
             }
-            else if(document.getElementById("mothsPerDay").selectedIndex === 4){
-                tempPerDay(365)
+            else if(document.getElementById("tempOptions").selectedIndex === 4){
+                trapTempPerDay(365)
             }
-            else if(document.getElementById("mothsPerDay").selectedIndex === 5){
-                tempPerDay(1095)
+            else if(document.getElementById("tempOptions").selectedIndex === 5){
+                trapTempPerDay(1095)
             }
+
         }
 			var OptionClicked;
 			function setSortDropDown(){
@@ -1377,9 +1667,9 @@
 						<input type="text" id="newEmail2" class="input_" name="newEmail" placeholder="Confirm new email">
 					</form>-->
 					<h3>Change email address</h3>
-					<form id="newEmailForm" method="POST" action="" onsubmit="return false">
+					<form id="newEmailForm" method="POST" action="changeEmail.php" onsubmit="return false">
 						<input type="text" required id ="newEmail1" class="input_" placeholder="New email">
-						<input type="text" required id ="newEmail2" name="newEmail" class="input_" placeholder="Confirm new email">
+						<input type="text" required id ="newEmail2" name="newEmail1" class="input_" placeholder="Confirm new email">
 						<button class="btn" onclick="validateNewEmail();">Submit</button><br>
 						<p></p>
 					</form>
@@ -1387,18 +1677,18 @@
 				</div>
 				<div id="changeLocation" class="prefsDivs">
 					<h3>Change default location of farm</h3>
-					<form id="newDefaultLocationForm" method="POST" action="" onsubmit="return false">
+					<form id="newDefaultLocationForm" method="POST" action="changeLocation.php" onsubmit="return false">
 						<div id="newDefaultLocationMap" style="width:425px;height:220px;" ></div>
-						<label>Lat: </label><input type="text" id="lblDefaultLat" name="newDefaultLat">
-						<label>Long: </label><input type="text" id="lblDefaultLong" name="newDefaultLong"><br>
+						<label>Lat: </label><input type="text" id="lblDefaultLat" name="newLatitude">
+						<label>Long: </label><input type="text" id="lblDefaultLong" name="newLongitude"><br>
 						<button class="btn" onclick="validateNewDefaultLocation()">Submit</button>
 					</form><br>
 
 				</div>
 				<div id="changeAllTrapIntervals" class="prefsDivs">
 				<h3>Select the upload inteval to apply to all traps</h3>
-				<form id="newUploadForm" method="POST" action="" onsubmit="return false">
-					<select id="newUploadInterval">
+				<form id="newUploadForm" method="POST" action="changeUploadInterval.php" onsubmit="return false">
+					<select id="newUploadInterval" name="newInterval">
 						<option value="none">(--Select upload interval--)</option>
 						<option value="Everyhour">Every hour</option>
 						<option value="fiveperday">Five times a day</option>
@@ -1411,8 +1701,8 @@
 				</div>
 				<div id="changeSensingInterval" class="prefsDivs">
 					<h3>Select the environment sensing inteval to apply to all traps</h3>
-					<form id="newSensing" method="POST" action="" onsubmit="return false">
-						<select id="newSensingInterval">
+					<form id="newSensing" method="POST" action="changeSensingInterval.php" onsubmit="return false">
+						<select id="newSensingInterval" name="newSensing">
 							<option value="none">(--Select upload interval--)</option>
 							<option value="Everyhour">Every hour</option>
 							<option value="fiveperday">Five times a day</option>
@@ -1606,6 +1896,15 @@
 				<option value="per3Year">Last Three Years</option>
 			</select>
 			<div id="tempPerDayChart">FusionCharts will render here</div>
+			<select id="tempOptions" onchange="tempPerDaySelect()">
+				<option value="allTime">All</option>
+				<option value="perMonth">Last Month</option>
+				<option value="per3Month">Last 3 Months</option>
+				<option value="per6Month">Last 6 Months</option>
+				<option value="perYear">Last Year</option>
+				<option value="per3Year">Last Three Years</option>
+			</select>
+			<div id="tempGraph">FusionCharts will render here</div>
 		</div>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
 		<script>
