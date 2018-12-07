@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: hulis
  * Date: 2018/12/07
- * Time: 13:27
+ * Time: 14:46
  */
 
 include 'dbConnect.php';
@@ -16,10 +16,10 @@ if ($conn->connect_error) {
 session_start();
 $active_client = $_SESSION['clientId'];
 //$active_client = 21;
-$newEmail = $_POST['newEmail1'];
+$newInterval = $_POST['newInterval'];
 
-$sql = "UPDATE client
-SET username = '$newEmail'
+$sql = "UPDATE device
+SET Upload_Interval = '$newInterval'
 WHERE client_id = '$active_client';";
 $result = $conn->query($sql);
 
