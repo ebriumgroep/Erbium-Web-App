@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Dec 03, 2018 at 09:18 PM
+-- Generation Time: Dec 07, 2018 at 10:52 AM
 -- Server version: 5.7.19
--- PHP Version: 5.6.31
+-- PHP Version: 7.1.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `client` (
   `longitude` varchar(45) DEFAULT NULL,
   `Admin` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `client`
@@ -87,17 +87,17 @@ CREATE TABLE IF NOT EXISTS `device` (
 
 INSERT INTO `device` (`device_id`, `client_id`, `token`, `description`, `trap_group`, `Upload_Interval`, `Sensing_Interval`, `caught`, `tempCount`, `Battery_Percent`, `latitude`, `longitude`, `signal_strength`, `last_updated`, `data_available`) VALUES
 (20, 21, 'sac_6', 'waterpump', 'Butterflies', 'Everyhour', 'Every hour', 7, 0, 76, '-25.75217018660249', '28.228192079345718', 'Unavailable', 'Unavailable', 'Unavailable'),
-(21, 21, 'sac1', 'pump2', 'Moths', 'fiveperday', 'Every hour', 3, 7, 0, '-25.757272282088362', '28.231453645507827', 'Unavailable', 'Unavailable', 'Unavailable'),
+(21, 21, 'sac1', 'pump2', 'Moths', 'fiveperday', 'Every hour', 3, 8, 0, '-25.757272282088362', '28.231453645507827', 'Unavailable', 'Unavailable', 'Unavailable'),
 (22, 21, 'sac2', '0', 'Moths', 'Everyhour', 'Every hour', 1, 0, 0, '-25.760828158403434', '28.24733232287599', 'Unavailable', 'Unavailable', 'Unavailable'),
 (23, 21, 'sac3', '0', 'Moths', 'Everyhour', 'Every hour', 5, 0, 0, '-25.757426887620678', '28.226303804199233', 'Unavailable', 'Unavailable', 'Unavailable'),
 (24, 21, 'sac99', '88', 'Butterflies', 'onceperday', 'Every hour', 2, 0, 32, '-25.749541748843935', '28.2106826188965', 'Unavailable', 'Unavailable', 'Unavailable'),
-(25, 21, 'sac55', '0', 'Moths', 'onceperday', 'Every hour', 14, 0, 48, '-25.763765541123696', '28.22664712695314', '65', 'Unavailable', '0'),
-(26, 21, 'as22', '46', 'Moths', 'threeperday', 'Every hour', 0, 0, 0, '-25.741501460561782', '28.232826936523452', 'Unavailable', 'Unavailable', 'Unavailable'),
-(27, 21, 'sac20', '0', 'Moths', 'Everyhour', 'Every hour', 0, 0, 12, '-25.752634022522127', '28.248963105957046', 'Unavailable', 'Unavailable', 'Unavailable'),
-(28, 21, 'sac_900', '0', 'Moths', 'fiveperday', 'Every hour', 0, 0, 0, '-25.767321222964462', '28.25256799487306', 'Unavailable', 'Unavailable', 'Unavailable'),
-(29, 21, 's', '0', 's', 'Everyhour', 'Every hour', 0, 0, 0, '-25.75217018660249', '28.226818788330093', 'Unavailable', 'Unavailable', 'Unavailable'),
-(30, 21, 'trap46', '0', 'Moths', 'Everyhour', 'Every hour', 0, 0, 0, '-25.736089421725186', '28.23488687304689', 'Unavailable', 'Unavailable', 'Unavailable'),
-(31, 21, '222', '0', 'Moths', 'Everyhour', 'Every hour', 0, 0, 0, '', '', 'Unavailable', 'Unavailable', 'Unavailable');
+(25, 21, 'sac55', '0', 'Moths', 'onceperday', 'Every hour', 19, 0, 48, '-25.763765541123696', '28.22664712695314', '65', 'Unavailable', '0'),
+(26, 21, 'as22', '46', 'Moths', 'threeperday', 'Every hour', 1, 0, 0, '-25.741501460561782', '28.232826936523452', 'Unavailable', 'Unavailable', 'Unavailable'),
+(27, 21, 'sac20', '0', 'Moths', 'Everyhour', 'Every hour', 1, 0, 12, '-25.752634022522127', '28.248963105957046', 'Unavailable', 'Unavailable', 'Unavailable'),
+(28, 21, 'sac_900', '0', 'Moths', 'fiveperday', 'Every hour', 11, 0, 0, '-25.767321222964462', '28.25256799487306', 'Unavailable', 'Unavailable', 'Unavailable'),
+(29, 21, 's', '0', 's', 'Everyhour', 'Every hour', 1, 0, 0, '-25.75217018660249', '28.226818788330093', 'Unavailable', 'Unavailable', 'Unavailable'),
+(30, 21, 'trap46', '0', 'Moths', 'Everyhour', 'Every hour', 4, 0, 0, '-25.736089421725186', '28.23488687304689', 'Unavailable', 'Unavailable', 'Unavailable'),
+(31, 21, '222', '0', 'Moths', 'Everyhour', 'Every hour', 1, 0, 0, '', '', 'Unavailable', 'Unavailable', 'Unavailable');
 
 -- --------------------------------------------------------
 
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `temp_humid` (
   `battery_percentage` int(11) NOT NULL,
   PRIMARY KEY (`th_id`),
   KEY `device_id_idx` (`device_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `temp_humid`
@@ -157,7 +157,8 @@ INSERT INTO `temp_humid` (`th_id`, `temperature`, `humidity`, `time_stamp`, `dev
 (7, 6, 20, 1542537906, 24, 0, 0, 0, 0),
 (8, 31, 0, 1542231477, 21, 0, 26, 4, 12),
 (9, 31, 29.5, 1542231477, 21, 0, 26, 4, 12),
-(10, 31, -1, 1542231477, 21, 0, 26, 4, 12);
+(10, 31, -1, 1542231477, 21, 0, 26, 4, 12),
+(11, 31, -1, 1542231477, 21, 0, 26, 4, 12);
 
 -- --------------------------------------------------------
 
@@ -176,14 +177,38 @@ CREATE TABLE IF NOT EXISTS `trap_count` (
   `battery_percentage` int(11) NOT NULL,
   PRIMARY KEY (`inc_id`),
   KEY `device_id` (`device_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `trap_count`
 --
 
 INSERT INTO `trap_count` (`inc_id`, `time_stamp`, `device_id`, `data_loss_flag`, `signal_strength`, `bit_error_rate`, `battery_percentage`) VALUES
-(31, 1540837557, 25, 1, 31, 5, 60);
+(31, 1540837557, 25, 1, 31, 5, 60),
+(32, 1540837557, 25, 1, 31, 5, 60),
+(33, 1543622400, 25, 1, 31, 5, 60),
+(34, 1543622400, 26, 1, 31, 5, 60),
+(35, 1543622400, 27, 1, 31, 5, 60),
+(36, 1543622400, 28, 1, 31, 5, 60),
+(37, 1543622400, 28, 1, 31, 5, 60),
+(38, 1543622400, 29, 1, 31, 5, 60),
+(39, 1543622400, 30, 1, 31, 5, 60),
+(41, 1543795200, 31, 1, 31, 5, 60),
+(42, 1543795200, 30, 1, 31, 5, 60),
+(43, 1543795200, 30, 1, 31, 5, 60),
+(44, 1543795200, 30, 1, 31, 5, 60),
+(45, 1543795200, 28, 1, 31, 5, 60),
+(46, 1543795200, 28, 1, 31, 5, 60),
+(47, 1543795200, 28, 1, 31, 5, 60),
+(48, 1543795200, 25, 1, 31, 5, 60),
+(49, 1544140800, 25, 1, 31, 5, 60),
+(50, 1544140800, 25, 1, 31, 5, 60),
+(51, 1544140800, 28, 1, 31, 5, 60),
+(52, 1544140800, 28, 1, 31, 5, 60),
+(53, 1544140800, 28, 1, 31, 5, 60),
+(54, 1544140800, 28, 1, 31, 5, 60),
+(55, 1544140800, 28, 1, 31, 5, 60),
+(56, 1544140800, 28, 1, 31, 5, 60);
 
 --
 -- Constraints for dumped tables
