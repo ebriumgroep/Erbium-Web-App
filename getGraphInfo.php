@@ -50,7 +50,7 @@
         for ($i = 0; $i < $result->num_rows; $i++) {
             $row = $result->fetch_assoc();
 
-            $date = gmdate("Y-m-d", $row['time_stamp']);;
+            $date = gmdate("d-m-Y", $row['time_stamp']);;
             if(dateExists($date, $finalArray)){
                 for ($j = 0; $j < count($finalArray); $j++) {
                     if ($finalArray[$j]['label'] == $date) {
