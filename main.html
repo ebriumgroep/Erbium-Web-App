@@ -1505,7 +1505,7 @@
                     } else if(eSelect.selectedIndex === 2){
 						//battery?
                         tempA.sort(function(a, b) {
-                            return b[4] - a[4];
+                            return b[5] - a[5];
                         });
                         maintrapdiv.innerHTML = '';//delete child elements on div
                         numOfTraps = 0;
@@ -1770,7 +1770,7 @@
 
 						</div>
 						<div class="modal-body">
-							<form method="POST" action="addTrap.php" id="trapForm" onKeyPress="enterAddTrap(event, this)">
+							<form method="POST" action="linkClientTrap.php" id="trapForm" onKeyPress="enterAddTrap(event, this)">
 								Description: <input type="text" required id="addTrapDescription" name="description"><br>
 								Trap Group: <input type="text" required id="addTraptype" name="type"><br>
 								Token: <input type="text" required  id="addTraphardware" name="token"><br>
