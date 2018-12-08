@@ -4,6 +4,7 @@
 	//$db = mysqli_connect('localhost', 'id7227985_root', 'erbium', 'id7227985_erbium');
     //Anrich db
     $db = mysqli_connect('localhost', 'root', '', 'id7227985_erbium');
+//$db = mysqli_connect('localhost', 'id7227985_root', 'erbium', 'id7227985_erbium'); //for actual db
 	// initialize variables
 	$client_id = 0;
 	$token = "";

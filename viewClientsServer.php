@@ -1,7 +1,7 @@
 <?php 
 	session_start();
 	$db = mysqli_connect('localhost', 'root', '', 'id7227985_erbium');
-
+    //$db = mysqli_connect('', '', '', 'id7227985_erbium');//for actual db
 	// initialize variables
 	$full_name = "";
 	$username = "";
