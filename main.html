@@ -46,7 +46,9 @@
                     console.log("Data: " + data + "\nStatus: " + status);
                     if(status === "success"){
                         trapArr = JSON.parse(data);
+                        console.log(trapArr);
                         displayNumOfTraps(trapArr);
+
                     }
                 });
                 $(document).ready(function(){
@@ -78,7 +80,7 @@
                 farmLat = testUserDetails[2];
                 farmLong = testUserDetails[3];
                 isAdmin = testUserDetails[4];
-				document.getElementById("userlat").value = farmLat;
+				//document.getElementById("userlat").value = farmLat;
                 $.get("user_details.php", function(data, status){
                     console.log("User data: ")
                     console.log(data);
@@ -1478,65 +1480,69 @@
                 var eSelect = document.getElementById('sortDropdown');
                 var maintrapdiv = document.getElementById("trapsDisplay");
                 var tempArr=[];
-                for(i=0;i<trapArrSortByCaught.length;i++){
-                    tempArr.push(trapArrSortByCaught[i][2]);
-				}
-                var uniqueGroupsSet = new Set(tempArr);
-                var uniqueGroupsForClient = Array.from(uniqueGroupsSet);
-                var select = document.getElementById("sortDropdown");
-                for(j=0;j<uniqueGroupsForClient.length;j++){
-					var newSelect = document.createElement('option');
-					newSelect.innerHTML = uniqueGroupsForClient[j];
-                    newSelect.value = uniqueGroupsForClient[j];
-                    select.appendChild(newSelect);
-				}
-                var text = eSelect.options[eSelect.selectedIndex].text;
-                //var tempA = [];
-                var tempA = trapArr;
-                var tempB = trapArrSortByTemp;
-                eSelect.onchange = function() {
-                    if(eSelect.selectedIndex === 1) {
-                        tempA.sort(function(a, b) {
-                            return b[1] - a[1];
-                        });
-                        maintrapdiv.innerHTML = '';//delete child elements on div
-						numOfTraps = 0;
-                        displayNumOfTraps(tempA);
-                    } else if(eSelect.selectedIndex === 2){
-						//battery?
-                        tempA.sort(function(a, b) {
-                            return b[5] - a[5];
-                        });
-                        maintrapdiv.innerHTML = '';//delete child elements on div
-                        numOfTraps = 0;
-                        displayNumOfTraps(tempA);
+                if(trapArrSortByTemp != null || trapArrSortByTemp.length !== 0 || trapArrSortByTemp === 'undefined'){
+                    for(i=0;i<trapArrSortByCaught.length;i++){
+                        tempArr.push(trapArrSortByCaught[i][2]);
                     }
-                    else if(eSelect.selectedIndex === 3){
-                        //SORT BY TEMP
-                        tempB.sort(function(a, b) {
-                            return b[14] - a[14];
-                        });
-                        maintrapdiv.innerHTML = '';//delete child elements on div
-                        numOfTraps = 0;
-                        displayNumOfTraps(tempB);
-					}
-					else{
-                        const counter = trapArr.length;
-                        var sel = document.getElementById("sortDropdown").value;
-                        const newArr = [];
-                        for(j=0;j<counter;j++){
-                            const t = trapArr;
-                            if(t[j][2] === sel){
-                                newArr.push(t[j]);
-                            }
+                    var uniqueGroupsSet = new Set(tempArr);
+                    var uniqueGroupsForClient = Array.from(uniqueGroupsSet);
+                    var select = document.getElementById("sortDropdown");
+                    for(j=0;j<uniqueGroupsForClient.length;j++){
+                        var newSelect = document.createElement('option');
+                        newSelect.innerHTML = uniqueGroupsForClient[j];
+                        newSelect.value = uniqueGroupsForClient[j];
+                        select.appendChild(newSelect);
+                    }
+                    var text = eSelect.options[eSelect.selectedIndex].text;
+                    //var tempA = [];
+                    var tempA = trapArr;
+                    var tempB = trapArrSortByTemp;
+                    eSelect.onchange = function() {
+                        if(eSelect.selectedIndex === 1) {
+                            tempA.sort(function(a, b) {
+                                return b[1] - a[1];
+                            });
+                            maintrapdiv.innerHTML = '';//delete child elements on div
+                            numOfTraps = 0;
+                            displayNumOfTraps(tempA);
+                        } else if(eSelect.selectedIndex === 2){
+                            //battery?
+                            tempA.sort(function(a, b) {
+                                return b[5] - a[5];
+                            });
+                            maintrapdiv.innerHTML = '';//delete child elements on div
+                            numOfTraps = 0;
+                            displayNumOfTraps(tempA);
                         }
-                        console.log(newArr);
-                        console.log(counter);
-                        maintrapdiv.innerHTML = '';//delete child elements on div
-                        numOfTraps = 0;
-                        displayNumOfTraps(newArr);
-					}
-                }
+                        else if(eSelect.selectedIndex === 3){
+                            //SORT BY TEMP
+                            tempB.sort(function(a, b) {
+                                return b[14] - a[14];
+                            });
+                            maintrapdiv.innerHTML = '';//delete child elements on div
+                            numOfTraps = 0;
+                            displayNumOfTraps(tempB);
+                        }
+                        else{
+                            const counter = trapArr.length;
+                            var sel = document.getElementById("sortDropdown").value;
+                            const newArr = [];
+                            for(j=0;j<counter;j++){
+                                const t = trapArr;
+                                if(t[j][2] === sel){
+                                    newArr.push(t[j]);
+                                }
+                            }
+                            console.log(newArr);
+                            console.log(counter);
+                            maintrapdiv.innerHTML = '';//delete child elements on div
+                            numOfTraps = 0;
+                            displayNumOfTraps(newArr);
+                        }
+                    }
+				}
+
+
 			}
         var t;
         $.get("getTraps.php", function(data, status){

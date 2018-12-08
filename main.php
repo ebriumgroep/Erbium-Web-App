@@ -14,10 +14,10 @@
     $sql = "SELECT * from device where client_id = '$active_client'";
     $result = $conn->query($sql);
     $counter = 0;
-	
+$result_array = array();
 	if($result->num_rows > 0)
 	{
-        $result_array = array();
+
 		while ($row = $result->fetch_assoc()) {
             $result_array[] = array($row["token"],$row["caught"],$row["trap_group"],$row["Upload_Interval"],$row["Sensing_Interval"],
                 $row["Battery_Percent"], $row["device_id"], $row["latitude"],$row["longitude"],$row["description"],
