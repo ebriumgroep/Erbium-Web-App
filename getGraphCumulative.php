@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: hulis
- * Date: 2018/12/13
- * Time: 11:17
+ * Date: 2018/12/14
+ * Time: 01:10
  */
 
 include 'dbConnect.php';
@@ -21,8 +21,18 @@ function dateExists($date, $array2D){
     return false;
 }
 
+function increment($date, $array2D){
+    for ($i = 0; $i < count($array2D); $i++) {
+        if ($array2D[$i]['label'] == $date) {
+            $array2D[$i]['value']++;
+            break;
+        }
+    }
+}
+
+
 session_start();
-//$active_client = 21;
+//	$active_client = 21;
 $active_client = $_SESSION['clientId'];
 
 //Get Device ID's of the current user
@@ -37,42 +47,37 @@ for ($i = 0; $i < $result->num_rows; $i++) {
 $deviceIDS_countable = $deviceIDS;
 $deviceIDS = implode(', ', $deviceIDS);
 
-//Get data from each tuple
 if(count($deviceIDS_countable)>0){
-    $sql = "SELECT * FROM temp_humid 
+    $sql = "SELECT * FROM trap_count 
                 where device_id IN ($deviceIDS)";
     $result = $conn->query($sql);
 
-    //Run through each humidity row
+//        $row = $result->fetch_assoc();
+//        echo gmdate("Y-m-d", $row['time_stamp']);
     for ($i = 0; $i < $result->num_rows; $i++) {
         $row = $result->fetch_assoc();
 
-        $date = gmdate("d-m-Y", $row['time_stamp']);
+        $date = gmdate("d-m-Y", $row['time_stamp']);;
         if(dateExists($date, $finalArray)){
             for ($j = 0; $j < count($finalArray); $j++) {
                 if ($finalArray[$j]['label'] == $date) {
-                    $finalArray[$j]['value']+= $row['humidity'];
-                    $finalArray[$j]['numHumid']++;
+                    $finalArray[$j]['value']++;
                     break;
                 }
             }
         }else{
             $tempArray = array();
             $tempArray['label'] = $date;
-            $tempArray['value'] = $row['humidity'];
-            $tempArray['numHumid'] = 1;
+            $tempArray['value'] = 0;
             array_push($finalArray, $tempArray);
         }
     }
 }
 
-//Compute Average
-for ($i = 0; $i < count($finalArray); $i++){
-    $finalArray[$i]['value'] = $finalArray[$i]['value']/$finalArray[$i]['numHumid'];
-}
 
-
-echo json_encode($finalArray);
 $conn->close();
-//	echo json_encode($jsonArray);
-return;
+
+for ($i = 1; $i < count($finalArray); $i++){
+    $finalArray[$i]['value'] += $finalArray[$i-1]['value'];
+}
+echo json_encode($finalArray);

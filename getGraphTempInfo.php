@@ -22,8 +22,8 @@ function dateExists($date, $array2D){
 }
 
 session_start();
-$active_client = 21;
-//$active_client = $_SESSION['clientId'];
+//$active_client = 21;
+$active_client = $_SESSION['clientId'];
 
 //Get Device ID's of the current user
 $sql = "SELECT device_id FROM device where client_id= '$active_client'";
