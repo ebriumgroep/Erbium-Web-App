@@ -43,10 +43,10 @@
 
                 //Get traps
                 $.get("main.php", function(data, status){
-                    console.log("Data: " + data + "\nStatus: " + status);
+                    //console.log("Data: " + data + "\nStatus: " + status);
                     if(status === "success"){
                         trapArr = JSON.parse(data);
-                        console.log(trapArr);
+                        //console.log(trapArr);
                         displayNumOfTraps(trapArr);
 
                     }
@@ -82,8 +82,8 @@
                 isAdmin = testUserDetails[4];
 				//document.getElementById("userlat").value = farmLat;
                 $.get("user_details.php", function(data, status){
-                    console.log("User data: ")
-                    console.log(data);
+                    //console.log("User data: ")
+                    //console.log(data);
                     if(status === "success"){
                         data = JSON.parse(data);
                         userObject.fullName = data[0];
@@ -134,7 +134,7 @@
                     //AjaxCallBackHumid(response);
                     //alert(tempHumid);
                     arrayForHumid.push(id,response);
-                    console.log(arrayForHumid);
+                    //console.log(arrayForHumid);
                 }
             });
         }
@@ -208,7 +208,7 @@
                                     }
                 document.getElementById("trapNo").innerHTML = "The number of traps atm is: " + numOfTraps;
             }
-			console.log(trapArrSortByTemp);
+			//console.log(trapArrSortByTemp);
 		    var no=0;
             function addTrapDiv(tempName,caught,type,upload,sensInt,battery,id,latitude,longitude,description,sig,lastU,dataA,averageHumid,averageTemp)
             {
@@ -241,7 +241,8 @@
                         });*/
                         myMap2(lat,long);
                         document.getElementById("editDescription").value = description;
-                        document.getElementById("upload_interval").value = UploadInt;
+                        document.getElementById("upload_interval").text = UploadInt;
+                        document.getElementById("sensing_interval").text = sensingUp;
                         document.getElementById("editType").value = TrapType;
                         document.getElementById("Tid").value = name;
                         document.getElementById("lblLat").value = lat;
@@ -260,6 +261,8 @@
                         document.getElementById("showLong").value = long;
                         showTrapMap(name,lat,long);
                     }
+				var error = document.createElement("image");
+                    error.id = "errorButton";
                 var clickMe = document.createElement("button");
                     clickMe.innerHTML = "";
                     clickMe.id = "editTButton";
@@ -274,7 +277,7 @@
                 deleteTrap.onclick = function() {
 
                     $.get("deleteTrap.php", {token:tempName}, function(data, status){
-                        console.log("Removed:"+status);
+                        //console.log("Removed:"+status);
                         // if(data !== ""){
                         alert(data);
                         // }
@@ -325,6 +328,7 @@
                 iHeader.innerHTML = "Desc: " + description;
 
                 iDiv.appendChild(iHeader);
+                iDiv.appendChild(error);
                 iDiv.appendChild(clickMe);
                 iDiv.appendChild(deleteTrap);
                 iDiv.appendChild(showMore);
@@ -336,7 +340,7 @@
                 iDiv.appendChild(device_bat);
                 document.getElementById("trapsDisplay").appendChild(iDiv);
             }
-        console.log(trapArrDescriptions);
+        //console.log(trapArrDescriptions);
             //for the tab
             function openCity(evt, cityName) {
                 // Declare all variables
@@ -438,7 +442,7 @@
                 var chartData2;
                 var chartData3;
                 $.get("getTrapCaughDescriptionGraph.php", function(data, status){
-                    console.log("Data: " + data + "\nStatus: " + status);
+                    //console.log("Data: " + data + "\nStatus: " + status);
                     if(status === "success"){
                         chartData1 = JSON.parse(data);
                         var chartProperties1 = {
@@ -498,14 +502,11 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-							console.log(element);
+							//console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
                     xhrr2.send(null);
-                    //alert(element[1].label);
-
-					var newChartData3 =[];
                     var q = new Date();
                     Object.keys(element).forEach(function(key) {
                         //console.log(key, chartData3[key],chartData3[key].label);
@@ -513,7 +514,7 @@
                             + element[key].label.substring(5,element[key].label.length);
                         //console.log(new Date(readableDate));
                         var tDate = new Date(readableDate);
-                        console.log(tDate);
+                        //console.log(tDate);
                         //console.log("today: ", q);
                         if(!sameMonth(tDate,q)){
                             //alert(tDate);
@@ -521,7 +522,7 @@
 							delete element[key];
                         }
                     });
-                    console.log(chartData3);
+                    //console.log(chartData3);
                     var chartProperties3 = {
                         "caption": "Caught over the last month",
                         "xAxisName": "Time stamp",
@@ -548,49 +549,11 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                            //console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
                     xhrr2.send(null);
-                    const chartData3 = [
-                        {
-                            "label": "27-08-2018 00:00:00",
-                            "value": "5"
-                        },
-                        {
-                            "label": "27-10-2018 08:12:56",
-                            "value": "8"
-                        },
-                        {
-                            "label": "27-11-2018 13:12:22",
-                            "value": "3"
-                        },
-                        {
-                            "label": "30-11-2018 16:02:00",
-                            "value": "7"
-                        },
-                        {
-                            "label": "01-11-2018 16:02:00",
-                            "value": "12"
-                        },
-                        {
-                            "label": "05-11-2018 16:02:00",
-                            "value": "19"
-                        },
-                        {
-                            "label": "03-12-2018 16:02:00",
-                            "value": "2"
-                        },
-                        {
-                            "label": "04-12-2018 16:02:00",
-                            "value": "7"
-                        },
-                        {
-                            "label": "05-12-2018 16:02:00",
-                            "value": "11"
-                        },
-                    ]
                     var q = new Date();
                     q.setMonth(q.getMonth() - 3);
                     Object.keys(element).forEach(function(key) {
@@ -606,7 +569,7 @@
                             delete element[key];
                         }
                     });
-                    console.log(chartData3);
+                    //console.log(chartData3);
                     var chartProperties3 = {
                         "caption": "Caught over a the last 3 months",
                         "xAxisName": "Time stamp",
@@ -633,7 +596,7 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                            //console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
@@ -763,7 +726,7 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                            //console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
@@ -782,7 +745,7 @@
                             delete chartData3[key];
                         }
                     });
-                    console.log(chartData3);
+                    //console.log(chartData3);
                     var chartProperties3 = {
                         "caption": "Caught over the last 3 years",
                         "xAxisName": "Time stamp",
@@ -809,7 +772,7 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                            //console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphInfo.php', false);
@@ -1098,7 +1061,7 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                            //console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphTempInfo.php', false);
@@ -1386,7 +1349,7 @@
                         if (xhrr2.readyState == XMLHttpRequest.DONE) {
                             //console.log(xhrr2.responseText);
                             element = JSON.parse(xhrr2.responseText);
-                            console.log(element);
+                           // console.log(element);
                         }
                     }
                     xhrr2.open('GET', 'getGraphHumidInfo.php', false);
@@ -1597,7 +1560,7 @@
                     if (xhrr2.readyState == XMLHttpRequest.DONE) {
                         //console.log(xhrr2.responseText);
                         element = JSON.parse(xhrr2.responseText);
-                        console.log(element);
+                        //console.log(element);
                     }
                 }
                 xhrr2.open('GET', 'getGraphCumulative.php', false);
@@ -1760,8 +1723,8 @@
                                     newArr.push(t[j]);
                                 }
                             }
-                            console.log(newArr);
-                            console.log(counter);
+                           // console.log(newArr);
+                            //console.log(counter);
                             maintrapdiv.innerHTML = '';//delete child elements on div
                             numOfTraps = 0;
                             displayNumOfTraps(newArr);
@@ -1786,11 +1749,11 @@
             //Also store the farm location to be the centre point
 			const allLocations = [];
 			const individualLocations = [];
-            console.log(t);
+            //console.log(t);
             for(i=0;i<t.length;i++){
 				allLocations[i] = new Array(t[i][2],t[i][7],t[i][8]);
 			}
-			console.log(allLocations);
+			//console.log(allLocations);
 			function addLocation(name,lat,long){
 			}
 
@@ -2066,7 +2029,7 @@
 								<option value="onceperday">Once a day</option>
 						</select><br>
 						Humidity and Temprature interval: 
-						<select name="sensing_interval">
+						<select name="sensing_interval" id="sensing_interval">
 							<option value="Everyhour">Every hour</option>
 							<option value="fiveperday">Five times a day</option>
 							<option value="threeperday">Three times a day</option>
@@ -2159,13 +2122,9 @@
 		</div>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
 		<script>
-			function sort(){
-				tinysort('#trapsDisplay > div',{attr: 'name'});
-
-			}
 			var markers =[];
 		function showTrapMap(name,lat,long) {
-            console.log(lat);
+            //console.log(lat);
             if (typeof lat === 'undefined') {
                 // the variable is defined
             }
