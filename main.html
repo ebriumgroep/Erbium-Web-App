@@ -466,6 +466,7 @@
                 //tempPerDay(30);
                 trapTempPerDay(0);
                 trapHumidPerDay(0);
+                cumMothsGraph();
 			}
 
 			function mothsPerDay(inter){
@@ -1591,7 +1592,35 @@
                 }
 			}
 			function cumMothsGraph(){
-
+                var xhrr2 = new XMLHttpRequest();
+                xhrr2.onreadystatechange = function() {
+                    if (xhrr2.readyState == XMLHttpRequest.DONE) {
+                        //console.log(xhrr2.responseText);
+                        element = JSON.parse(xhrr2.responseText);
+                        console.log(element);
+                    }
+                }
+                xhrr2.open('GET', 'getGraphCumulative.php', false);
+                xhrr2.send(null);
+                var chartProperties3 = {
+                    "caption": "Cumulative moths caught",
+                    "xAxisName": "Time stamp",
+                    "yAxisName": "Caught",
+                    "rotatevalues": "1",
+                    "theme": "zune"
+                };
+                Chart3 = new FusionCharts({
+                    type: 'line',
+                    renderAt: 'cumulativeGraph',
+                    width: '550',
+                    height: '350',
+                    dataFormat: 'json',
+                    dataSource: {
+                        "chart": chartProperties3,
+                        "data": element
+                    }
+                });
+                Chart3.render();
 			}
 			function mothsPerDaySelect(){
                 if(document.getElementById("mothsPerDay").selectedIndex === 0){
@@ -2125,6 +2154,8 @@
 				<option value="per3Year">Last Three Years</option>
 			</select>
 			<div id="humidGraph">FusionCharts will render here</div><br><br>
+			<h3 style="color:white">Cumulative moths caught for all traps</h3>
+			<div id="cumulativeGraph"></div><br>
 		</div>
 		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-INs4-fin3CKhBWpuSq0bTPeLKgq_YjU&callback=init" type="text/javascript"></script>
 		<script>
