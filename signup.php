@@ -18,11 +18,6 @@ $active_username = $_POST['username'];
 $active_latitude = $_POST['latitude'];
 $active_longitude = $_POST['longitude'];
 
-/*if(strlen($active_password)<8){
-    echo 'The password should be at least 8 characters long';
-    exit();
-}*/
-
 $active_password = substr(md5(uniqid(mt_rand(), true)), 0, 8);
 
 $escapedPW = mysqli_real_escape_string($conn, $active_password);
@@ -30,33 +25,47 @@ $salt = bin2hex(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM));
 $saltedPW = $escapedPW.$salt;
 $hashedPW = hash('sha256', $saltedPW);
 
-/*$mailMessage = 'Hi '.$active_fullname.', your auto generated Erbium password is '.$active_password.'.';
-$mailMessage = wordwrap($mailMessage, 70);
-if(mail($active_username, "Erbium Registration", $mailMessage))
-    echo "Sent";
-else
-    echo "Not sent";
-return;*/
-
 $tempStr = $active_fullname/*.'-'.$active_password*/;
 
-//mail("hulisanimudimeli@gmail.com", "Erbium Something", "Hi bro");
-$sql = "INSERT INTO client(full_name, username, password, salt, latitude, longitude, Admin)
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'email\PHPMailer\src\Exception.php';
+require 'email\PHPMailer\src\PHPMailer.php';
+require 'email\PHPMailer\src\SMTP.php';
+$mail = new PHPMailer(true);
+
+//Send mail using gmail
+$mail->IsSMTP(); // telling the class to use SMTP
+$mail->SMTPAuth = true; // enable SMTP authentication
+$mail->SMTPSecure = "ssl"; // sets the prefix to the servier
+$mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
+$mail->Port = 465; // set the SMTP port for the GMAIL server
+$mail->Username = "erbiumtest@gmail.com"; // GMAIL username //Must allow less secure apps option on google account to work
+$mail->Password = "erbium123"; // GMAIL password
+
+//Typical mail data
+$mail->AddAddress($active_username, $active_fullname);
+$mail->SetFrom("noreply@erbium.com", "Erbium No Reply");
+$mail->Subject = "Erbium Registration";
+$mail->Body = "Hi ".$active_fullname.".\n\nThis email serves to inform you your auto generated password to use for your initial login.\n"
+    ."The password is: ".$active_password."\nLog in with your email and the password that has been provided to you";
+try{
+    $mail->Send();
+
+    $sql = "INSERT INTO client(full_name, username, password, salt, latitude, longitude, Admin)
 		VALUES ('$tempStr', '$active_username', '$hashedPW', '$salt','$active_latitude','$active_longitude', 0)";
-
-//echo $active_fullname.'-'.$active_username.'-'.$hashedPW.'-'.$salt;
-
-if($conn->query($sql) === true){
-    //--Send Email Here
-
-
-    //--Email Sending Done
-
-    $conn->close();
-    echo "New user successfully added!";
+    if($conn->query($sql) === true){
+        echo "New user successfully added!\n";
+    }
+    else{
+        echo $conn->error;
+    }
+} catch(Exception $e){
+    echo "Fail - " . $mail->ErrorInfo;
 }
-else{
-    echo $conn->error;
-    $conn->close();
-}
+
+$conn->close();
+
+
 return;
