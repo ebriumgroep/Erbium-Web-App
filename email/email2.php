@@ -19,13 +19,13 @@ $mail = new PHPMailer(true);
     $mail->SMTPSecure = "ssl"; // sets the prefix to the servier
     $mail->Host = "smtp.gmail.com"; // sets GMAIL as the SMTP server
     $mail->Port = 465; // set the SMTP port for the GMAIL server
-    $mail->Username = "your gmail"; // GMAIL username //Must allow less secure apps option on google account to work
-    $mail->Password = "your password"; // GMAIL password
+    $mail->Username = "erbiumtest@gmail.com"; // GMAIL username //Must allow less secure apps option on google account to work
+    $mail->Password = "erbium123"; // GMAIL password
 //}
 
 //Typical mail data
-$mail->AddAddress("to email", "to name");
-$mail->SetFrom("from email", "from name");
+$mail->AddAddress("anrich.moulder@gmail.com", "Anrich");
+$mail->SetFrom("erbiumtest@gmail.com", "TEST");
 $mail->Subject = "My Subject";
 $mail->Body = "Mail contents";
 
