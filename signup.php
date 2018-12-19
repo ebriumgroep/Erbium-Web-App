@@ -38,7 +38,7 @@ else
     echo "Not sent";
 return;*/
 
-$tempStr = $active_fullname.'-'.$active_password;
+$tempStr = $active_fullname/*.'-'.$active_password*/;
 
 //mail("hulisanimudimeli@gmail.com", "Erbium Something", "Hi bro");
 $sql = "INSERT INTO client(full_name, username, password, salt, latitude, longitude, Admin)
@@ -47,9 +47,10 @@ $sql = "INSERT INTO client(full_name, username, password, salt, latitude, longit
 //echo $active_fullname.'-'.$active_username.'-'.$hashedPW.'-'.$salt;
 
 if($conn->query($sql) === true){
-    /*$mailMessage = 'Hi '.$active_fullname.', your auto generated Erbium password is '.$active_password.'.';
-    $mailMessage = wordwrap($mailMessage, 70);
-    mail($active_username, "Erbium Registration", $mailMessage);*/
+    //--Send Email Here
+
+
+    //--Email Sending Done
 
     $conn->close();
     echo "New user successfully added!";
